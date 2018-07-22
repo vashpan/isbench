@@ -1,0 +1,6 @@
+# macOS noise
+.DS_Store
+profile
+
+# executables
+build/unix/isbench
