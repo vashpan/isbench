@@ -2,5 +2,8 @@
 .DS_Store
 profile
 
-# executables
+# executables & debug symbols
 build/unix/isbench
+build/unix/isbench-dbg
+build/unix/*.dSYM/*
+build/unix/*.dSYM/*

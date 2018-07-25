@@ -1,9 +1,13 @@
 CC = gcc
-CFLAGS = -O2 -I../../src
-SRC = ../../src/bench.c ../../src/bmain.c ../../src/platform/unix/main.c ../../src/platform/unix/platform.c  
+CFLAGS = -I../../src
+INCLUDES = -I "../../src"
+SRC = ../../src/*.c ../../src/platform/unix/*.c
 
 isbench: $(SRC)
-	$(CC) -o $@ $(SRC) $(CFLAGS)
+	$(CC) -o $@ $(SRC) -O2 $(CFLAGS) $(INCLUDES)
+
+isbench-dbg: $(SRC)
+	$(CC) -o $@ $(SRC) -g $(CFLAGS) $(INCLUDES)
 
 clean:
-	rm -f *.o isbench
+	rm -f *.o isbench	
