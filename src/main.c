@@ -40,12 +40,12 @@ enum bench_type {
 };
 
 static void print_results(long iterations[BENCH_TYPE_MAX]) {
-    /*static long results[BENCH_TYPE_MAX] = { 0 };*/
+    bench_printf("\n\n");
 
     int i;
     for(i=0; i<BENCH_TYPE_MAX; ++i) {
         if(i == BENCH_TYPE_RAND) {
-            bench_printf("Linear Congruential Random Numbers Generator:\t%ld\n", iterations[i]);
+            bench_printf("Linear Congruential RNG:\t\t%ld\n", iterations[i]);
         }
     }
 }
