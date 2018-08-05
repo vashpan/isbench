@@ -45,5 +45,5 @@ double bench_get_time() {
     struct timespec tp;
     clock_gettime(CLOCK_MONOTONIC, &tp);
     
-    return (double)tp.tv_sec;
+    return (double)(tp.tv_sec + (tp.tv_nsec / 1E9));
 }

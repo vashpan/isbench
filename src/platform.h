@@ -32,4 +32,4 @@ int bench_main(int argc, char const *argv[]);
 void bench_printf(const char * format, ...);
 
 /* time functions */
-double bench_get_time();
+double bench_get_time(); // returns time since epoch, in seconds
