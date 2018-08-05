@@ -53,10 +53,11 @@ static void print_results(long iterations[BENCH_TYPE_MAX]) {
 int bench_main(int argc, char const *argv[]) {
     bench_printf("Incredibly Simple Benchmark! %s \n", ISBENCH_VERSION);
 
+    /* start benchmarking */
     static long iterations[BENCH_TYPE_MAX] = { 0 };
 
     double start = bench_get_time();
-    double current, elapsed_time;
+    double current, elapsed_time, time_remainder;
     do {
         /* perform one iteration of benchmarks */
         bench_random_numbers();
@@ -66,6 +67,15 @@ int bench_main(int argc, char const *argv[]) {
         elapsed_time = current - start;
     } while(elapsed_time <= BENCH_TIME);
 
+    /* include time remainder and modify results accordingly */
+    time_remainder = BENCH_TIME - elapsed_time;
+    
+    int i;
+    for(i=0; i<BENCH_TYPE_MAX; ++i) {
+        iterations[i] += (iterations[i] * (time_remainder / BENCH_TIME));
+    }
+
+    /* printing results */
     print_results(iterations);
 
     return 0;
