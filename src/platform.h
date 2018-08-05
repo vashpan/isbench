@@ -31,5 +31,5 @@ int bench_main(int argc, char const *argv[]);
 /* printing functions */
 void bench_printf(const char * format, ...);
 
-
-
+/* time functions */
+double bench_get_time();

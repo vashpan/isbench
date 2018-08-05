@@ -29,6 +29,7 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <time.h>
 
 #include "platform.h"
 
@@ -38,6 +39,11 @@ void bench_printf(const char * format, ...) {
     va_start(arglist, format);
     vprintf(format, arglist);
     va_end(arglist);
+}
 
-
+double bench_get_time() {
+    struct timespec tp;
+    clock_gettime(CLOCK_MONOTONIC, &tp);
+    
+    return (double)tp.tv_sec;
 }
