@@ -39,13 +39,53 @@ enum bench_type {
     BENCH_TYPE_MAX
 };
 
+static void format_score_number(long number, char* result, unsigned result_size) {
+    /* divide number until to at least k */
+    double new_value = number;
+    int multiplier = 0;
+    const int limit = 3; /* billions at most */
+
+    while(new_value > 1000.0 && multiplier <= limit) {
+        new_value /= 1000.0;
+        multiplier++;
+    } 
+
+    /* format value properly */
+    char size_postfix;
+    
+    switch (multiplier) {
+        case 1:
+            size_postfix = 'k';
+            break;
+        
+        case 2:
+           size_postfix = 'M';
+           break;
+
+        case 3:
+            size_postfix = 'G';
+            break;
+
+        default:
+            size_postfix = 0;
+            break;
+    }
+
+    bench_snprintf(result, result_size, "%.1f%c", new_value, size_postfix);
+}
+
 static void print_results(long iterations[BENCH_TYPE_MAX]) {
     bench_printf("\n\n");
 
     int i;
     for(i=0; i<BENCH_TYPE_MAX; ++i) {
         if(i == BENCH_TYPE_RAND) {
-            bench_printf("Linear Congruential RNG:\t\t%ld\n", iterations[i]);
+            static const unsigned number_string_size = 128;
+            char number_string[number_string_size] = { 0 };
+            long result = iterations[i];
+            format_score_number(result, number_string, number_string_size);
+            
+            bench_printf("Linear Congruential RNG:\t\t%s\n", number_string);
         }
     }
 }
