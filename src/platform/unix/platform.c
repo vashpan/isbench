@@ -33,11 +33,19 @@
 
 #include "platform.h"
 
-void bench_printf(const char * format, ...) {
+void bench_printf(const char *format, ...) {
     va_list arglist;
 
     va_start(arglist, format);
     vprintf(format, arglist);
+    va_end(arglist);
+}
+
+void bench_snprintf(char* str, unsigned len, const char* format, ...) {
+    va_list arglist;
+
+    va_start(arglist, format);
+    vsnprintf(str, len, format, arglist);
     va_end(arglist);
 }
 

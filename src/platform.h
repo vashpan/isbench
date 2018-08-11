@@ -30,6 +30,7 @@ int bench_main(int argc, char const *argv[]);
 
 /* printing functions */
 void bench_printf(const char * format, ...);
+void bench_snprintf(char* str, unsigned len, const char* format, ...);
 
 /* time functions */
 double bench_get_time(); // returns time since epoch, in seconds
