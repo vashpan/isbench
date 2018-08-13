@@ -30,13 +30,27 @@
 static int rnd_state = 0;
 static const int rnd_max = ((1U << 15) - 1);
 
-static void rnd_init(int seed) {
+void rnd_init(int seed) {
     rnd_state = seed;
 }
 
-static int rnd_get_int() {
+int rnd_get_int() {
     rnd_state = (rnd_state * 214013 + 2531011) & rnd_max;
 	return rnd_state;
+}
+
+int rnd_get_int_range(int from, int to) {
+    int range = to - from;
+
+	return from + rnd_get_int() % range;
+}
+
+float rnd_get_float() {
+    return (float)(rnd_get_int()) / (float)rnd_max;
+}
+
+float rnd_get_double() {
+    return (double)(rnd_get_int()) / (double)rnd_max;
 }
 
 void bench_random_numbers() {

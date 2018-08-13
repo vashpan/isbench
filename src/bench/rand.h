@@ -28,4 +28,12 @@
 #define BENCH_RND_ITERATIONS 1000
 #define BENCH_RND_SEED 4345
 
+void rnd_init(int seed);
+
+int rnd_get_int();
+int rnd_get_int_range(int from, int to);
+float rnd_get_float();
+float rnd_get_double();
+
 void bench_random_numbers();
+
