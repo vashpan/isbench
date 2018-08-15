@@ -28,6 +28,7 @@
 
 #include "platform.h"
 #include "bench/rand.h"
+#include "bench/wc.h"
 
 #define ISBENCH_VERSION "1.0.0"
 
@@ -37,6 +38,7 @@
 
 enum bench_type {
     BENCH_TYPE_RAND = 0,
+    BENCH_TYPE_WC,
 
     BENCH_TYPE_MAX
 };
@@ -86,7 +88,15 @@ static void print_results(long iterations[BENCH_TYPE_MAX]) {
             long result = iterations[i];
             format_score_number(result, number_string, NUMBER_STRING_SIZE);
             
-            bench_printf("Linear Congruential RNG:\t\t%s\n", number_string);
+            bench_printf("Random numbers:\t\t%s\n", number_string);
+        }
+
+        if(i == BENCH_TYPE_WC) {
+            char number_string[NUMBER_STRING_SIZE] = { 0 };
+            long result = iterations[i];
+            format_score_number(result, number_string, NUMBER_STRING_SIZE);
+
+            bench_printf("Word Count:\t\t%s\n", number_string);
         }
     }
 }
@@ -103,6 +113,9 @@ int bench_main(int argc, char const *argv[]) {
         /* perform one iteration of benchmarks */
         bench_random_numbers();
         iterations[BENCH_TYPE_RAND]++;
+
+        bench_word_count();
+        iterations[BENCH_TYPE_WC]++;
 
         current = bench_get_time();
         elapsed_time = current - start;
