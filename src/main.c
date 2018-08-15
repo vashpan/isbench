@@ -77,7 +77,7 @@ static void format_score_number(long number, char* result, unsigned result_size)
 }
 
 static void print_results(long iterations[BENCH_TYPE_MAX]) {
-    bench_printf("\n\n");
+    bench_printf("\n");
 
     int i;
     for(i=0; i<BENCH_TYPE_MAX; ++i) {
