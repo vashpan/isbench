@@ -92,7 +92,7 @@ static void print_results(long iterations[BENCH_TYPE_MAX]) {
 }
 
 int bench_main(int argc, char const *argv[]) {
-    bench_printf("Incredibly Simple Benchmark! %s \n", ISBENCH_VERSION);
+    bench_printf("Incredibly Simple Benchmark! %s (%d seconds) \n", ISBENCH_VERSION, (int)BENCH_TIME);
 
     /* start benchmarking */
     static long iterations[BENCH_TYPE_MAX] = { 0 };
