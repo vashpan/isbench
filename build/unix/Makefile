@@ -1,5 +1,6 @@
 INCLUDES = -I "../../src" -I "../../src/bench"
 SRC = ../../src/*.c ../../src/bench/*.c ../../src/platform/unix/*.c
+CFLAGS = -std=c89
 
 isbench: $(SRC)
 	$(CC) -o $@ $(SRC) -O2 $(CFLAGS) $(INCLUDES)

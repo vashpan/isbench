@@ -33,6 +33,8 @@
 
 #define BENCH_TIME 5.0 /* total benchmark time in seconds */
 
+#define NUMBER_STRING_SIZE 128 /* maximum size of score string */
+
 enum bench_type {
     BENCH_TYPE_RAND = 0,
 
@@ -80,10 +82,9 @@ static void print_results(long iterations[BENCH_TYPE_MAX]) {
     int i;
     for(i=0; i<BENCH_TYPE_MAX; ++i) {
         if(i == BENCH_TYPE_RAND) {
-            static const unsigned number_string_size = 128;
-            char number_string[number_string_size] = { 0 };
+            char number_string[NUMBER_STRING_SIZE] = { 0 };
             long result = iterations[i];
-            format_score_number(result, number_string, number_string_size);
+            format_score_number(result, number_string, NUMBER_STRING_SIZE);
             
             bench_printf("Linear Congruential RNG:\t\t%s\n", number_string);
         }
