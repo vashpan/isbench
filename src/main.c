@@ -32,16 +32,16 @@
 
 #define ISBENCH_VERSION "1.0.0"
 
-#define BENCH_TIME 5.0 /* total benchmark time in seconds */
+#define BENCH_TIME 5.0 /* benchmark time of one test in seconds */
 
 #define NUMBER_STRING_SIZE 128 /* maximum size of score string */
 
-enum bench_type {
+typedef enum {
     BENCH_TYPE_RAND = 0,
     BENCH_TYPE_WC,
 
     BENCH_TYPE_MAX
-};
+} bench_type;
 
 static void format_score_number(long number, char* result, unsigned result_size) {
     /* divide number until to at least k */
@@ -78,59 +78,60 @@ static void format_score_number(long number, char* result, unsigned result_size)
     bench_snprintf(result, result_size, "%.1f%c", new_value, size_postfix);
 }
 
-static void print_results(long iterations[BENCH_TYPE_MAX]) {
-    bench_printf("\n");
+static void print_results(bench_type type, long iterations[BENCH_TYPE_MAX]) {
+    if(type == BENCH_TYPE_RAND) {
+        char number_string[NUMBER_STRING_SIZE] = { 0 };
+        long result = iterations[type];
+        format_score_number(result, number_string, NUMBER_STRING_SIZE);
+        
+        bench_printf("Random numbers:\t\t%s\n", number_string);
+    }
 
-    int i;
-    for(i=0; i<BENCH_TYPE_MAX; ++i) {
-        if(i == BENCH_TYPE_RAND) {
-            char number_string[NUMBER_STRING_SIZE] = { 0 };
-            long result = iterations[i];
-            format_score_number(result, number_string, NUMBER_STRING_SIZE);
-            
-            bench_printf("Random numbers:\t\t%s\n", number_string);
-        }
+    if(type == BENCH_TYPE_WC) {
+        char number_string[NUMBER_STRING_SIZE] = { 0 };
+        long result = iterations[type];
+        format_score_number(result, number_string, NUMBER_STRING_SIZE);
 
-        if(i == BENCH_TYPE_WC) {
-            char number_string[NUMBER_STRING_SIZE] = { 0 };
-            long result = iterations[i];
-            format_score_number(result, number_string, NUMBER_STRING_SIZE);
-
-            bench_printf("Word Count:\t\t%s\n", number_string);
-        }
+        bench_printf("Word Count:\t\t%s\n", number_string);
     }
 }
 
 int bench_main(int argc, char const *argv[]) {
-    bench_printf("Incredibly Simple Benchmark! %s (%d seconds) \n", ISBENCH_VERSION, (int)BENCH_TIME);
+    bench_printf("Incredibly Simple Benchmark! %s (%d seconds per test) \n\n", ISBENCH_VERSION, (int)BENCH_TIME);
 
     /* start benchmarking */
     static long iterations[BENCH_TYPE_MAX] = { 0 };
 
-    double start = bench_get_time();
+    int i;
+    double start;
     double current, elapsed_time, time_remainder;
-    do {
-        /* perform one iteration of benchmarks */
-        bench_random_numbers();
-        iterations[BENCH_TYPE_RAND]++;
+    for(i=0; i<BENCH_TYPE_MAX; ++i) {
+        start = bench_get_time();
+        do {
+            /* perform specific benchmark */
+            if(i == BENCH_TYPE_RAND) {
+                bench_random_numbers();
+            } else if(i == BENCH_TYPE_WC) {
+                bench_word_count();
+            }
 
-        bench_word_count();
-        iterations[BENCH_TYPE_WC]++;
+            iterations[i]++;
 
-        current = bench_get_time();
-        elapsed_time = current - start;
-    } while(elapsed_time <= BENCH_TIME);
+            current = bench_get_time();
+            elapsed_time = current - start;
+        } while(elapsed_time <= BENCH_TIME);
+
+        /* print results for current benchmark */
+        print_results(i, iterations);
+    }
 
     /* include time remainder and modify results accordingly */
     time_remainder = BENCH_TIME - elapsed_time;
     
-    int i;
-    for(i=0; i<BENCH_TYPE_MAX; ++i) {
-        iterations[i] += (iterations[i] * (time_remainder / BENCH_TIME));
+    int j;
+    for(j=0; j<BENCH_TYPE_MAX; ++j) {
+        iterations[j] += (iterations[j] * (time_remainder / BENCH_TIME));
     }
-
-    /* printing results */
-    print_results(iterations);
 
     return 0;
 }
