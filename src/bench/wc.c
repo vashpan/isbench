@@ -87,7 +87,7 @@ static unsigned wc_count(const char* text) {
 void bench_word_count() {
     const int iterations = BENCH_WC_ITERATIONS;
 
-    unsigned total = 0;
+    volatile unsigned total = 0;
     int i;
 
     for(i = 0; i < iterations; ++i) { 

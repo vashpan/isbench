@@ -61,7 +61,7 @@ void bench_random_numbers() {
     const int seed = BENCH_RND_SEED;
     
     int i = 0;
-    double avg;
+    volatile double avg;
 
     rnd_init(seed);
 
