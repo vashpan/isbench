@@ -27,8 +27,10 @@
 */
 
 #include "platform.h"
+
 #include "bench/rand.h"
 #include "bench/wc.h"
+#include "bench/crc32.h"
 
 #define ISBENCH_VERSION "1.0.0"
 
@@ -39,6 +41,7 @@
 typedef enum {
     BENCH_TYPE_RAND = 0,
     BENCH_TYPE_WC,
+    BENCH_TYPE_CRC32,
 
     BENCH_TYPE_MAX
 } bench_type;
@@ -94,6 +97,14 @@ static void print_results(bench_type type, long iterations[BENCH_TYPE_MAX]) {
 
         bench_printf("Word Count:\t\t%s\n", number_string);
     }
+
+    if(type == BENCH_TYPE_CRC32) {
+        char number_string[NUMBER_STRING_SIZE] = { 0 };
+        long result = iterations[type];
+        format_score_number(result, number_string, NUMBER_STRING_SIZE);
+
+        bench_printf("CRC32:\t\t\t%s\n", number_string);
+    }
 }
 
 int bench_main(int argc, char const *argv[]) {
@@ -111,8 +122,14 @@ int bench_main(int argc, char const *argv[]) {
             /* perform specific benchmark */
             if(i == BENCH_TYPE_RAND) {
                 bench_random_numbers();
-            } else if(i == BENCH_TYPE_WC) {
+            } 
+            
+            if(i == BENCH_TYPE_WC) {
                 bench_word_count();
+            }
+
+            if(i == BENCH_TYPE_CRC32) {
+                bench_crc32_hashes();
             }
 
             iterations[i]++;
