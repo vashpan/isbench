@@ -32,7 +32,7 @@ typedef unsigned char bool;
 
 #define BENCH_WC_ITERATIONS 500
 
-static const char* test_text = "Hello World! It's a very dark and not a helpful place. We like computers but do they like us?";
+static const char* test_text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tristique ante libero, eu sodales arcu euismod sit amet. Duis nec consequat metus. Donec ut lectus vel dui blandit blandit. Nam luctus scelerisque.";
 
 static unsigned wc_strlen(const char* text) {
     unsigned len = 0;
