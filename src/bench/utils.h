@@ -1,10 +1,12 @@
 /*
 *  isbench
-*  wc.h
+*  utils.h
 *
-*  Word count benchmark
+*  Common utility functions used by benchmark code.
+*  Many of them are just reimplementation of standard library functions.
+*  They are implemented here to avoid standard-library dependency on performance.
 *
-*  Copyright © 2018 Konrad Kołakowski
+*  Copyright ©2018 Konrad Kołakowski
 *
 *  Permission is hereby granted, free of charge, to any person obtaining 
 *  a copy of this software and associated documentation files (the "Software"),
@@ -25,4 +27,15 @@
 *  DEALINGS IN THE SOFTWARE.
 */
 
-void bench_word_count();
+#ifndef _UTILS_H
+#define _UTILS_H
+
+#define TRUE 1
+#define FALSE 0
+
+typedef unsigned char bool;
+
+unsigned isb_strlen(const char* text);
+bool isb_iswhitespace(char c);
+
+#endif
