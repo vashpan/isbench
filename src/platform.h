@@ -25,6 +25,9 @@
 *  DEALINGS IN THE SOFTWARE.
 */
 
+#ifndef _BENCH_PLATFORM_H
+#define _BENCH_PLATFORM_H
+
 /* should be defined in platform "main" function and called just after environment setup */
 int bench_main(int argc, char const *argv[]);
 
@@ -34,3 +37,5 @@ void bench_snprintf(char* str, unsigned len, const char* format, ...);
 
 /* time functions */
 double bench_get_time(); // returns time since epoch, in seconds
+
+#endif

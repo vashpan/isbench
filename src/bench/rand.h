@@ -25,6 +25,9 @@
 *  DEALINGS IN THE SOFTWARE.
 */
 
+#ifndef _RAND_H
+#define _RAND_H
+
 void rnd_init(int seed);
 
 int rnd_get_int();
@@ -34,3 +37,4 @@ float rnd_get_double();
 
 void bench_random_numbers();
 
+#endif

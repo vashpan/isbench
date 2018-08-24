@@ -25,4 +25,9 @@
 *  DEALINGS IN THE SOFTWARE.
 */
 
+#ifndef _WC_H
+#define _WC_H
+
 void bench_word_count();
+
+#endif
