@@ -35,6 +35,6 @@ int rnd_get_int_range(int from, int to);
 float rnd_get_float();
 float rnd_get_double();
 
-void bench_random_numbers();
+double bench_random_numbers();
 
 #endif

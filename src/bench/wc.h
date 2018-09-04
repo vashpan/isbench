@@ -28,6 +28,6 @@
 #ifndef _WC_H
 #define _WC_H
 
-void bench_word_count();
+double bench_word_count();
 
 #endif

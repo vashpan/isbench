@@ -55,16 +55,18 @@ static void crc32(const void *data, size_t n_bytes, uint32_t* crc) {
     }
 }
 
-void bench_crc32_hashes() {
+double bench_crc32_hashes() {
     const int iterations = BENCH_CRC32_ITERATIONS;
 
     size_t bytes_num = isb_strlen(test_data);
     uint32_t crc32num;
-    volatile uint32_t result;
+    uint32_t result;
 
     int i;
     for(i = 0; i < iterations; ++i) {
         crc32(test_data, bytes_num, &crc32num); /* do not include nul character at the end of the string */
         result ^= crc32num;
     }
+
+    return (double)result;
 }

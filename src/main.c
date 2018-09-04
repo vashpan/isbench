@@ -81,13 +81,13 @@ static void format_score_number(long number, char* result, unsigned result_size)
     bench_snprintf(result, result_size, "%.1f%c", new_value, size_postfix);
 }
 
-static void print_results(bench_type type, long iterations[BENCH_TYPE_MAX]) {
+static void print_results(bench_type type, long iterations[BENCH_TYPE_MAX], double results[BENCH_TYPE_MAX]) {
     if(type == BENCH_TYPE_RAND) {
         char number_string[NUMBER_STRING_SIZE] = { 0 };
         long result = iterations[type];
         format_score_number(result, number_string, NUMBER_STRING_SIZE);
         
-        bench_printf("Random numbers:\t\t%s\n", number_string);
+        bench_printf("Random numbers (%.2f):\t\t%s\n", results[type], number_string);
     }
 
     if(type == BENCH_TYPE_WC) {
@@ -95,7 +95,7 @@ static void print_results(bench_type type, long iterations[BENCH_TYPE_MAX]) {
         long result = iterations[type];
         format_score_number(result, number_string, NUMBER_STRING_SIZE);
 
-        bench_printf("Word Count:\t\t%s\n", number_string);
+        bench_printf("Word Count (%.0f):\t\t%s\n", results[type], number_string);
     }
 
     if(type == BENCH_TYPE_CRC32) {
@@ -103,7 +103,7 @@ static void print_results(bench_type type, long iterations[BENCH_TYPE_MAX]) {
         long result = iterations[type];
         format_score_number(result, number_string, NUMBER_STRING_SIZE);
 
-        bench_printf("CRC32:\t\t\t%s\n", number_string);
+        bench_printf("CRC32 (0x%X):\t\t\t%s\n", (uint32_t)results[type], number_string);
     }
 }
 
@@ -112,6 +112,7 @@ int bench_main(int argc, char const *argv[]) {
 
     /* start benchmarking */
     static long iterations[BENCH_TYPE_MAX] = { 0 };
+    static double results[BENCH_TYPE_MAX] = { 0.0 };
 
     int i;
     double start;
@@ -121,15 +122,15 @@ int bench_main(int argc, char const *argv[]) {
         do {
             /* perform specific benchmark */
             if(i == BENCH_TYPE_RAND) {
-                bench_random_numbers();
+                results[i] = bench_random_numbers();
             } 
             
             if(i == BENCH_TYPE_WC) {
-                bench_word_count();
+                results[i] = bench_word_count();
             }
 
             if(i == BENCH_TYPE_CRC32) {
-                bench_crc32_hashes();
+                results[i] = bench_crc32_hashes();
             }
 
             iterations[i]++;
@@ -139,7 +140,7 @@ int bench_main(int argc, char const *argv[]) {
         } while(elapsed_time <= BENCH_TIME);
 
         /* print results for current benchmark */
-        print_results(i, iterations);
+        print_results(i, iterations, results);
     }
 
     /* include time remainder and modify results accordingly */

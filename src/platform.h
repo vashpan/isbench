@@ -28,6 +28,8 @@
 #ifndef _BENCH_PLATFORM_H
 #define _BENCH_PLATFORM_H
 
+#include "platform/pstdint.h"
+
 /* should be defined in platform "main" function and called just after environment setup */
 int bench_main(int argc, char const *argv[]);
 

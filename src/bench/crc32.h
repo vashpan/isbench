@@ -28,6 +28,6 @@
 #ifndef _CRC32_H
 #define _CRC32_H
 
-void bench_crc32_hashes();
+double bench_crc32_hashes();
 
 #endif

@@ -56,12 +56,12 @@ float rnd_get_double() {
     return (double)(rnd_get_int()) / (double)rnd_max;
 }
 
-void bench_random_numbers() {
+double bench_random_numbers() {
     const int iterations = BENCH_RND_ITERATIONS;
     const int seed = BENCH_RND_SEED;
     
     int i = 0;
-    volatile double avg;
+    double avg;
 
     rnd_init(seed);
 
@@ -70,4 +70,6 @@ void bench_random_numbers() {
         avg += rnd_get_int();
         avg /= 2.0;
     }
+
+    return avg;
 }
