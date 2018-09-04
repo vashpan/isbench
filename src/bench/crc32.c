@@ -64,7 +64,7 @@ void bench_crc32_hashes() {
 
     int i;
     for(i = 0; i < iterations; ++i) {
-        crc32(test_data, bytes_num + 1, &crc32num);
-        result = crc32num;
+        crc32(test_data, bytes_num, &crc32num); /* do not include nul character at the end of the string */
+        result ^= crc32num;
     }
 }
