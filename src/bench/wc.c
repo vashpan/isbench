@@ -25,6 +25,7 @@
 *  DEALINGS IN THE SOFTWARE.
 */
 
+#include "wc.h"
 #include "utils.h"
 
 #define BENCH_WC_ITERATIONS 500
@@ -62,7 +63,7 @@ static unsigned wc_count(const char* text) {
     return count;
 }
 
-double bench_word_count() {
+bench_result_t bench_word_count() {
     const int iterations = BENCH_WC_ITERATIONS;
 
     int total = 0;
@@ -72,5 +73,8 @@ double bench_word_count() {
         total += wc_count(test_text);
     }
 
-    return (double)(total / iterations);
+    bench_result_t result;
+    result.int_value = total / iterations;
+    
+    return result;
 }

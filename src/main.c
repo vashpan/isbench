@@ -28,6 +28,7 @@
 
 #include "platform.h"
 
+#include "bench/result.h"
 #include "bench/rand.h"
 #include "bench/wc.h"
 #include "bench/crc32.h"
@@ -83,16 +84,16 @@ static void format_score_number(long number, char* result, unsigned result_size)
     bench_snprintf(result, result_size, "%.1f%c", new_value, size_postfix);
 }
 
-static void print_results(bench_type type, long iterations[BENCH_TYPE_MAX], double results[BENCH_TYPE_MAX]) {
+static void print_results(bench_type type, long iterations[BENCH_TYPE_MAX], bench_result_t results[BENCH_TYPE_MAX]) {
     char results_string[NUMBER_STRING_SIZE] = { 0 };
     long result = iterations[type];
     format_score_number(result, results_string, NUMBER_STRING_SIZE);
 
     switch(type) {
-        case BENCH_TYPE_RAND: bench_printf("Random numbers (%.2f):\t\t%s\n", results[type], results_string); break;
-        case BENCH_TYPE_WC: bench_printf("Word Count (%.0f):\t\t\t%s\n", results[type], results_string); break;
-        case BENCH_TYPE_CRC32: bench_printf("CRC32 (0x%X):\t\t\t%s\n", (uint32_t)results[type], results_string); break;
-        case BENCH_TYPE_RLE: bench_printf("RLE (%.0f):\t\t\t%s\n", results[type], results_string); break;
+        case BENCH_TYPE_RAND: bench_printf("Random numbers (%.2f):\t\t%s\n", results[type].double_value, results_string); break;
+        case BENCH_TYPE_WC: bench_printf("Word Count (%d):\t\t\t%s\n", results[type].int_value, results_string); break;
+        case BENCH_TYPE_CRC32: bench_printf("CRC32 (0x%X):\t\t\t%s\n", results[type].uint32_value, results_string); break;
+        case BENCH_TYPE_RLE: bench_printf("RLE (%d):\t\t\t\t%s\n", results[type].uint32_value, results_string); break;
 
         default: bench_printf("???: \t\t\t%s\n", results_string); break;
     }
@@ -103,7 +104,7 @@ int bench_main(int argc, char const *argv[]) {
 
     /* start benchmarking */
     static long iterations[BENCH_TYPE_MAX] = { 0 };
-    static double results[BENCH_TYPE_MAX] = { 0.0 };
+    static bench_result_t results[BENCH_TYPE_MAX] = { 0.0 };
 
     int i;
     double start;

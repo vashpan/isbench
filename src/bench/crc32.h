@@ -25,9 +25,11 @@
 *  DEALINGS IN THE SOFTWARE.
 */
 
+#include "result.h"
+
 #ifndef _CRC32_H
 #define _CRC32_H
 
-double bench_crc32_hashes();
+bench_result_t bench_crc32_hashes();
 
 #endif

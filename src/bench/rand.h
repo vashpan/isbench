@@ -25,6 +25,8 @@
 *  DEALINGS IN THE SOFTWARE.
 */
 
+#include "result.h"
+
 #ifndef _RAND_H
 #define _RAND_H
 
@@ -35,6 +37,6 @@ int rnd_get_int_range(int from, int to);
 float rnd_get_float();
 float rnd_get_double();
 
-double bench_random_numbers();
+bench_result_t bench_random_numbers();
 
 #endif

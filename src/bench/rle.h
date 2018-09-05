@@ -25,9 +25,11 @@
 *  DEALINGS IN THE SOFTWARE.
 */
 
+#include "result.h"
+
 #ifndef _RLE_H
 #define _RLE_H
 
-double bench_rle_compression();
+bench_result_t bench_rle_compression();
 
 #endif

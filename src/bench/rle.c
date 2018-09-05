@@ -25,7 +25,7 @@
 *  DEALINGS IN THE SOFTWARE.
 */
 
-#include "platform/pstdint.h"
+#include "rle.h"
 
 #define BENCH_RLE_ITERATIONS 200
 #define BENCH_RLE_TEST_DATA_SIZE 100
@@ -56,9 +56,15 @@ static void rle_compress(uint8_t* input, size_t input_size, uint8_t* output, siz
         if(current_byte == last_byte) {
             same_bytes_num++;
         } else {
-            output[output_marker++] = last_byte;
-            output[output_marker++] = (uint8_t)(same_bytes_num & 0xFF);
-            output[output_marker++] = (uint8_t)(same_bytes_num >> 8);
+            /* for single bytes, just copy them, for sequences, repeat value twice as a chain marker */
+            if(same_bytes_num == 1) {
+                output[output_marker++] = last_byte;
+            } else {
+                output[output_marker++] = last_byte;
+                output[output_marker++] = last_byte;
+                output[output_marker++] = (uint8_t)(same_bytes_num & 0xFF);
+                output[output_marker++] = (uint8_t)(same_bytes_num >> 8);
+            }
             
             same_bytes_num = 1;
         }
@@ -69,21 +75,24 @@ static void rle_compress(uint8_t* input, size_t input_size, uint8_t* output, siz
     *output_size = output_marker;
 }
 
-double bench_rle_compression() {
+bench_result_t bench_rle_compression() {
     const int iterations = BENCH_RLE_ITERATIONS;
 
     size_t initial_size = BENCH_RLE_TEST_DATA_SIZE;
-    uint32_t result_hash = 0;
+    uint32_t sizes_sum = 0;
 
     int i;
     for(i = 0; i < iterations; ++i) {
-        uint8_t compressed_data[BENCH_RLE_TEST_DATA_SIZE] = { 0 };
+        uint8_t compressed_data[BENCH_RLE_TEST_DATA_SIZE * 3] = { 0 }; /* compressed data is in worst case 3 times as big */
         size_t compressed_size = 0;
 
         rle_compress((uint8_t*)test_data, initial_size, compressed_data, &compressed_size);
 
-        result_hash ^= compressed_size;
+        sizes_sum += compressed_size;
     }
 
-    return (double)result_hash;
+    bench_result_t result;
+    result.uint32_value = sizes_sum / iterations;
+    
+    return result;
 }

@@ -25,9 +25,11 @@
 *  DEALINGS IN THE SOFTWARE.
 */
 
+#include "result.h"
+
 #ifndef _WC_H
 #define _WC_H
 
-double bench_word_count();
+bench_result_t bench_word_count();
 
 #endif

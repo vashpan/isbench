@@ -27,6 +27,8 @@
 *  DEALINGS IN THE SOFTWARE.
 */
 
+#include "platform/pstdint.h"
+
 #ifndef _UTILS_H
 #define _UTILS_H
 
