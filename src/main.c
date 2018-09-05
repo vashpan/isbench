@@ -31,6 +31,7 @@
 #include "bench/rand.h"
 #include "bench/wc.h"
 #include "bench/crc32.h"
+#include "bench/rle.h"
 
 #define ISBENCH_VERSION "1.0.0"
 
@@ -42,6 +43,7 @@ typedef enum {
     BENCH_TYPE_RAND = 0,
     BENCH_TYPE_WC,
     BENCH_TYPE_CRC32,
+    BENCH_TYPE_RLE,
 
     BENCH_TYPE_MAX
 } bench_type;
@@ -90,6 +92,7 @@ static void print_results(bench_type type, long iterations[BENCH_TYPE_MAX], doub
         case BENCH_TYPE_RAND: bench_printf("Random numbers (%.2f):\t\t%s\n", results[type], results_string); break;
         case BENCH_TYPE_WC: bench_printf("Word Count (%.0f):\t\t\t%s\n", results[type], results_string); break;
         case BENCH_TYPE_CRC32: bench_printf("CRC32 (0x%X):\t\t\t%s\n", (uint32_t)results[type], results_string); break;
+        case BENCH_TYPE_RLE: bench_printf("RLE (%.0f):\t\t\t%s\n", results[type], results_string); break;
 
         default: bench_printf("???: \t\t\t%s\n", results_string); break;
     }
@@ -119,6 +122,10 @@ int bench_main(int argc, char const *argv[]) {
 
             if(i == BENCH_TYPE_CRC32) {
                 results[i] = bench_crc32_hashes();
+            }
+
+            if(i == BENCH_TYPE_RLE) {
+                results[i] = bench_rle_compression();
             }
 
             iterations[i]++;
