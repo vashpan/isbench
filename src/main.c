@@ -82,28 +82,16 @@ static void format_score_number(long number, char* result, unsigned result_size)
 }
 
 static void print_results(bench_type type, long iterations[BENCH_TYPE_MAX], double results[BENCH_TYPE_MAX]) {
-    if(type == BENCH_TYPE_RAND) {
-        char number_string[NUMBER_STRING_SIZE] = { 0 };
-        long result = iterations[type];
-        format_score_number(result, number_string, NUMBER_STRING_SIZE);
-        
-        bench_printf("Random numbers (%.2f):\t\t%s\n", results[type], number_string);
-    }
+    char results_string[NUMBER_STRING_SIZE] = { 0 };
+    long result = iterations[type];
+    format_score_number(result, results_string, NUMBER_STRING_SIZE);
 
-    if(type == BENCH_TYPE_WC) {
-        char number_string[NUMBER_STRING_SIZE] = { 0 };
-        long result = iterations[type];
-        format_score_number(result, number_string, NUMBER_STRING_SIZE);
+    switch(type) {
+        case BENCH_TYPE_RAND: bench_printf("Random numbers (%.2f):\t\t%s\n", results[type], results_string); break;
+        case BENCH_TYPE_WC: bench_printf("Word Count (%.0f):\t\t\t%s\n", results[type], results_string); break;
+        case BENCH_TYPE_CRC32: bench_printf("CRC32 (0x%X):\t\t\t%s\n", (uint32_t)results[type], results_string); break;
 
-        bench_printf("Word Count (%.0f):\t\t%s\n", results[type], number_string);
-    }
-
-    if(type == BENCH_TYPE_CRC32) {
-        char number_string[NUMBER_STRING_SIZE] = { 0 };
-        long result = iterations[type];
-        format_score_number(result, number_string, NUMBER_STRING_SIZE);
-
-        bench_printf("CRC32 (0x%X):\t\t\t%s\n", (uint32_t)results[type], number_string);
+        default: bench_printf("???: \t\t\t%s\n", results_string); break;
     }
 }
 
