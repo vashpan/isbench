@@ -33,6 +33,7 @@
 #include "bench/wc.h"
 #include "bench/crc32.h"
 #include "bench/rle.h"
+#include "bench/qsort.h"
 
 #define ISBENCH_VERSION "1.0.0"
 
@@ -45,6 +46,7 @@ typedef enum {
     BENCH_TYPE_WC,
     BENCH_TYPE_CRC32,
     BENCH_TYPE_RLE,
+    BENCH_TYPE_QSORT,
 
     BENCH_TYPE_MAX
 } bench_type;
@@ -94,6 +96,7 @@ static void print_results(bench_type type, long iterations[BENCH_TYPE_MAX], benc
         case BENCH_TYPE_WC: bench_printf("Word Count (%d):\t\t\t%s\n", results[type].int_value, results_string); break;
         case BENCH_TYPE_CRC32: bench_printf("CRC32 (0x%X):\t\t\t%s\n", results[type].uint32_value, results_string); break;
         case BENCH_TYPE_RLE: bench_printf("RLE (%d):\t\t\t\t%s\n", results[type].uint32_value, results_string); break;
+        case BENCH_TYPE_QSORT: bench_printf("Sort (%d):\t\t\t%s\n", results[type].uint32_value, results_string); break;
 
         default: bench_printf("???: \t\t\t%s\n", results_string); break;
     }
@@ -127,6 +130,10 @@ int bench_main(int argc, char const *argv[]) {
 
             if(i == BENCH_TYPE_RLE) {
                 results[i] = bench_rle_compression();
+            }
+
+            if(i == BENCH_TYPE_QSORT) {
+                results[i] = bench_quick_sort();
             }
 
             iterations[i]++;
