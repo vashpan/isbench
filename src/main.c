@@ -109,41 +109,48 @@ int bench_main(int argc, char const *argv[]) {
     static long iterations[BENCH_TYPE_MAX] = { 0 };
     static bench_result_t results[BENCH_TYPE_MAX] = { 0.0 };
 
-    int i;
+    int type;
     double start;
     double current, elapsed_time, time_remainder;
-    for(i=0; i<BENCH_TYPE_MAX; ++i) {
+    for(type=0; type<BENCH_TYPE_MAX; ++type) {
         start = bench_get_time();
         do {
-            /* perform specific benchmark */
-            if(i == BENCH_TYPE_RAND) {
-                results[i] = bench_random_numbers();
-            } 
-            
-            if(i == BENCH_TYPE_WC) {
-                results[i] = bench_word_count();
+            int number_of_iterations = 1;
+            switch(type) {
+                case BENCH_TYPE_RAND: 
+                    results[type] = bench_random_numbers(); 
+                    number_of_iterations = BENCH_RND_ITERATIONS;
+                    break;
+
+                case BENCH_TYPE_WC: 
+                    results[type] = bench_word_count();
+                    number_of_iterations = BENCH_WC_ITERATIONS;
+                    break;
+
+                case BENCH_TYPE_CRC32: 
+                    results[type] = bench_crc32_hashes(); 
+                    number_of_iterations = BENCH_CRC32_ITERATIONS;
+                    break;
+
+                case BENCH_TYPE_RLE: 
+                    results[type] = bench_rle_compression(); 
+                    number_of_iterations = BENCH_RLE_ITERATIONS;
+                    break;
+
+                case BENCH_TYPE_QSORT: 
+                    results[type] = bench_quick_sort();
+                    number_of_iterations = BENCH_QSORT_ITERATIONS;
+                    break;
             }
 
-            if(i == BENCH_TYPE_CRC32) {
-                results[i] = bench_crc32_hashes();
-            }
-
-            if(i == BENCH_TYPE_RLE) {
-                results[i] = bench_rle_compression();
-            }
-
-            if(i == BENCH_TYPE_QSORT) {
-                results[i] = bench_quick_sort();
-            }
-
-            iterations[i]++;
+            iterations[type] += number_of_iterations;
 
             current = bench_get_time();
             elapsed_time = current - start;
         } while(elapsed_time <= BENCH_TIME);
 
         /* print results for current benchmark */
-        print_results(i, iterations, results);
+        print_results(type, iterations, results);
     }
 
     /* include time remainder and modify results accordingly */
