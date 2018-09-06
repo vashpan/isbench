@@ -51,7 +51,7 @@ typedef enum {
     BENCH_TYPE_MAX
 } bench_type;
 
-static void format_score_number(long number, char* result, unsigned result_size) {
+static void format_score_number(uint64_t number, char* result, unsigned result_size) {
     /* divide number until to at least k */
     double new_value = number;
     int multiplier = 0;
@@ -86,7 +86,7 @@ static void format_score_number(long number, char* result, unsigned result_size)
     bench_snprintf(result, result_size, "%.1f%c", new_value, size_postfix);
 }
 
-static void print_results(bench_type type, long iterations[BENCH_TYPE_MAX], bench_result_t results[BENCH_TYPE_MAX]) {
+static void print_results(bench_type type, uint64_t iterations[BENCH_TYPE_MAX], bench_result_t results[BENCH_TYPE_MAX]) {
     char results_string[NUMBER_STRING_SIZE] = { 0 };
     long result = iterations[type];
     format_score_number(result, results_string, NUMBER_STRING_SIZE);
@@ -106,7 +106,7 @@ int bench_main(int argc, char const *argv[]) {
     bench_printf("Incredibly Simple Benchmark! %s (%d seconds per test) \n\n", ISBENCH_VERSION, (int)BENCH_TIME);
 
     /* start benchmarking */
-    static long iterations[BENCH_TYPE_MAX] = { 0 };
+    static uint64_t iterations[BENCH_TYPE_MAX] = { 0 };
     static bench_result_t results[BENCH_TYPE_MAX] = { 0.0 };
 
     int type;
@@ -115,7 +115,7 @@ int bench_main(int argc, char const *argv[]) {
     for(type=0; type<BENCH_TYPE_MAX; ++type) {
         start = bench_get_time();
         do {
-            int number_of_iterations = 1;
+            uint32_t number_of_iterations = 1;
             switch(type) {
                 case BENCH_TYPE_RAND: 
                     results[type] = bench_random_numbers(); 
