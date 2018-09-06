@@ -27,7 +27,6 @@
 
 #include "rand.h"
 
-#define BENCH_RND_ITERATIONS 1000
 #define BENCH_RND_SEED 4345
 
 static int rnd_state = 0;

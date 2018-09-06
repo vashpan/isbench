@@ -30,6 +30,8 @@
 #ifndef _QSORT_H_
 #define _QSORT_H_
 
+#define BENCH_QSORT_ITERATIONS 100
+
 bench_result_t bench_quick_sort();
 
 #endif

@@ -28,8 +28,7 @@
 #include "qsort.h"
 #include "rand.h"
 
-#define BENCH_QSORT_ITERATIONS 100
-#define BENCH_QSORT_TEST_DATA_SIZE 2048
+#define BENCH_QSORT_TEST_DATA_SIZE 64
 
 static int test_array[BENCH_QSORT_TEST_DATA_SIZE] = { 0 };
 

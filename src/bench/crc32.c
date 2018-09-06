@@ -29,8 +29,6 @@
 #include "crc32.h"
 #include "utils.h"
 
-#define BENCH_CRC32_ITERATIONS 1000
-
 static const char* test_data = "UORHDtOXVBF0BzSF c7MTtHDLhZXtwMgi Je4SupV53NBXOU0N 6Kw6eIOxL0KbHMCM zHHVvQUQVkkjGhSS 2WT3UTbloTxqrj4M";
 
 static uint32_t crc32_for_byte(uint32_t r) {

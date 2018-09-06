@@ -30,6 +30,8 @@
 #ifndef _RAND_H
 #define _RAND_H
 
+#define BENCH_RND_ITERATIONS 1000
+
 void rnd_init(int seed);
 
 int rnd_get_int();

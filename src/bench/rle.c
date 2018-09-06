@@ -27,7 +27,6 @@
 
 #include "rle.h"
 
-#define BENCH_RLE_ITERATIONS 200
 #define BENCH_RLE_TEST_DATA_SIZE 100
 
 static const uint8_t test_data[BENCH_RLE_TEST_DATA_SIZE] = { 

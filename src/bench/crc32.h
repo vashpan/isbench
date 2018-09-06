@@ -30,6 +30,8 @@
 #ifndef _CRC32_H
 #define _CRC32_H
 
+#define BENCH_CRC32_ITERATIONS 1000
+
 bench_result_t bench_crc32_hashes();
 
 #endif

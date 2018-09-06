@@ -96,7 +96,7 @@ static void print_results(bench_type type, long iterations[BENCH_TYPE_MAX], benc
         case BENCH_TYPE_WC: bench_printf("Word Count (%d):\t\t\t%s\n", results[type].int_value, results_string); break;
         case BENCH_TYPE_CRC32: bench_printf("CRC32 (0x%X):\t\t\t%s\n", results[type].uint32_value, results_string); break;
         case BENCH_TYPE_RLE: bench_printf("RLE (%d):\t\t\t\t%s\n", results[type].uint32_value, results_string); break;
-        case BENCH_TYPE_QSORT: bench_printf("Sort (%d):\t\t\t%s\n", results[type].uint32_value, results_string); break;
+        case BENCH_TYPE_QSORT: bench_printf("Sort (%d):\t\t\t\t%s\n", results[type].uint32_value, results_string); break;
 
         default: bench_printf("???: \t\t\t%s\n", results_string); break;
     }
