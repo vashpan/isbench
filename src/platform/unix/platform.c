@@ -27,7 +27,9 @@
 *  DEALINGS IN THE SOFTWARE.
 */
 
+#ifdef __linux__ 
 #define _POSIX_C_SOURCE 199309L /* to tell Linux Glibc to use proper POSIX standard */
+#endif
 
 #include <stdio.h>
 #include <stdarg.h>
