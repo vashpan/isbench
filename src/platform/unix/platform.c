@@ -27,6 +27,8 @@
 *  DEALINGS IN THE SOFTWARE.
 */
 
+#define _POSIX_C_SOURCE 199309L /* to tell Linux Glibc to use proper POSIX standard */
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <time.h>
@@ -52,6 +54,6 @@ void bench_snprintf(char* str, unsigned len, const char* format, ...) {
 double bench_get_time() {
     struct timespec tp;
     clock_gettime(CLOCK_MONOTONIC, &tp);
-    
+
     return (double)(tp.tv_sec + (tp.tv_nsec / 1E9));
 }

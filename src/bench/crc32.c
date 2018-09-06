@@ -32,7 +32,8 @@
 static const char* test_data = "UORHDtOXVBF0BzSF c7MTtHDLhZXtwMgi Je4SupV53NBXOU0N 6Kw6eIOxL0KbHMCM zHHVvQUQVkkjGhSS 2WT3UTbloTxqrj4M";
 
 static uint32_t crc32_for_byte(uint32_t r) {
-    for(int j = 0; j < 8; ++j) {
+	int j;
+    for(j = 0; j < 8; ++j) {
         r = (r & 1? 0: (uint32_t)0xEDB88320L) ^ r >> 1;
     }
 
@@ -41,14 +42,15 @@ static uint32_t crc32_for_byte(uint32_t r) {
 
 static void crc32(const void *data, size_t n_bytes, uint32_t* crc) {
     static uint32_t table[0x100];
+    size_t i;
 
     if(!*table) {
-        for(size_t i = 0; i < 0x100; ++i) {
+        for(i = 0; i < 0x100; ++i) {
             table[i] = crc32_for_byte(i);
         }
     }
 
-    for(size_t i = 0; i < n_bytes; ++i) {
+    for(i = 0; i < n_bytes; ++i) {
         *crc = table[(uint8_t)*crc ^ ((uint8_t*)data)[i]] ^ *crc >> 8;
     }
 }
