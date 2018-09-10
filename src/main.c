@@ -85,9 +85,9 @@ static void format_score_number(int64_t number, char* result, unsigned result_si
     bench_snprintf(result, result_size, "%.1f%c", new_value, size_postfix);
 }
 
-static void print_results(bench_type type, uint64_t iterations[BENCH_TYPE_MAX], bench_result_t results[BENCH_TYPE_MAX]) {
+static void print_results(bench_type type, int64_t iterations[BENCH_TYPE_MAX], bench_result_t results[BENCH_TYPE_MAX]) {
     char results_string[NUMBER_STRING_SIZE] = { 0 };
-    long result = iterations[type];
+    long result = (long)iterations[type];
     format_score_number(result, results_string, NUMBER_STRING_SIZE);
 
     switch(type) {
@@ -146,7 +146,7 @@ int bench_main(int argc, char const *argv[]) {
                     break;
             }
 
-            iterations[type] += (number_of_iterations / BENCH_TIME);
+            iterations[type] += (int64_t)(number_of_iterations / BENCH_TIME);
 
             current = bench_get_time();
             elapsed_time = current - start;
@@ -159,9 +159,8 @@ int bench_main(int argc, char const *argv[]) {
     /* include time remainder and modify results accordingly */
     time_remainder = BENCH_TIME - elapsed_time;
     
-    int j;
     for(j=0; j<BENCH_TYPE_MAX; ++j) {
-        iterations[j] += (iterations[j] * (time_remainder / BENCH_TIME));
+        iterations[j] += (int64_t)(iterations[j] * (time_remainder / BENCH_TIME));
     }
 
     return 0;
