@@ -27,9 +27,12 @@
 */
 
 #include "crc32.h"
+#include "rand.h"
 #include "utils.h"
 
-static const char* test_data = "UORHDtOXVBF0BzSF c7MTtHDLhZXtwMgi Je4SupV53NBXOU0N 6Kw6eIOxL0KbHMCM zHHVvQUQVkkjGhSS 2WT3UTbloTxqrj4M";
+#define CRC32_TEST_DATA_SIZE 128
+
+static char test_data[CRC32_TEST_DATA_SIZE] = { 0 };
 
 static uint32_t crc32_for_byte(uint32_t r) {
 	int j;
@@ -56,18 +59,29 @@ static void crc32(const void *data, size_t n_bytes, uint32_t* crc) {
     }
 }
 
+static void crc32_fill_test_data(char array[], size_t size) {
+    size_t i;
+
+    for(i = 0; i < size; ++i) {
+        array[i] = (char)rnd_get_int_range(32, 126);
+    }
+}
+
 bench_result_t bench_crc32_hashes() {
     const int iterations = BENCH_CRC32_ITERATIONS;
 
-    size_t bytes_num = isb_strlen(test_data);
     uint32_t crc32num;
     uint32_t result_hash = 0;
     int i;
 
     bench_result_t result;
 
+    rnd_init(8657332);
+
     for(i = 0; i < iterations; ++i) {
-        crc32(test_data, bytes_num, &crc32num); /* do not include nul character at the end of the string */
+        crc32_fill_test_data(test_data, CRC32_TEST_DATA_SIZE);
+
+        crc32(test_data, CRC32_TEST_DATA_SIZE, &crc32num); /* do not include nul character at the end of the string */
         result_hash ^= crc32num;
     }
 
