@@ -37,7 +37,7 @@ void rnd_init(int seed);
 int rnd_get_int();
 int rnd_get_int_range(int from, int to);
 float rnd_get_float();
-float rnd_get_double();
+double rnd_get_double();
 
 bench_result_t bench_random_numbers();
 

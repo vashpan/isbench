@@ -51,7 +51,7 @@ float rnd_get_float() {
     return (float)(rnd_get_int()) / (float)rnd_max;
 }
 
-float rnd_get_double() {
+double rnd_get_double() {
     return (double)(rnd_get_int()) / (double)rnd_max;
 }
 
