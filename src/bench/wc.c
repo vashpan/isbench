@@ -66,12 +66,13 @@ bench_result_t bench_word_count() {
 
     int total = 0;
     int i;
+    
+    bench_result_t result;
 
     for(i = 0; i < iterations; ++i) { 
         total += wc_count(test_text);
     }
 
-    bench_result_t result;
     result.int_value = total / iterations;
     
     return result;

@@ -61,6 +61,8 @@ bench_result_t bench_random_numbers() {
     
     int i = 0;
     double avg;
+    
+    bench_result_t result;
 
     rnd_init(seed);
 
@@ -70,7 +72,6 @@ bench_result_t bench_random_numbers() {
         avg /= 2.0;
     }
 
-    bench_result_t result;
     result.double_value = avg;
     
     return result;

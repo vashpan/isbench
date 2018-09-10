@@ -79,8 +79,10 @@ bench_result_t bench_rle_compression() {
 
     size_t initial_size = BENCH_RLE_TEST_DATA_SIZE;
     uint32_t sizes_sum = 0;
-
     int i;
+
+    bench_result_t result;
+
     for(i = 0; i < iterations; ++i) {
         uint8_t compressed_data[BENCH_RLE_TEST_DATA_SIZE * 3] = { 0 }; /* compressed data is in worst case 3 times as big */
         size_t compressed_size = 0;
@@ -90,7 +92,6 @@ bench_result_t bench_rle_compression() {
         sizes_sum += compressed_size;
     }
 
-    bench_result_t result;
     result.uint32_value = sizes_sum / iterations;
     
     return result;

@@ -60,15 +60,16 @@ bench_result_t bench_crc32_hashes() {
 
     size_t bytes_num = isb_strlen(test_data);
     uint32_t crc32num;
-    uint32_t result_hash;
-
+    uint32_t result_hash = 0;
     int i;
+
+    bench_result_t result;
+
     for(i = 0; i < iterations; ++i) {
         crc32(test_data, bytes_num, &crc32num); /* do not include nul character at the end of the string */
         result_hash ^= crc32num;
     }
 
-    bench_result_t result;
     result.uint32_value = result_hash;
     
     return result;

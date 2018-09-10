@@ -76,12 +76,14 @@ static void qsort(int array[], int l, int r) {
 }
 
 bench_result_t bench_quick_sort() {
-    const int iterations = BENCH_QSORT_TEST_DATA_SIZE;
+    const size_t iterations = BENCH_QSORT_TEST_DATA_SIZE;
     
     size_t i;
     uint32_t sum = 0;
-
+    bench_result_t result;
+    
     rnd_init(8657332);
+    
     for(i = 0; i < iterations; ++i) {
         qsort_fill_test_data(test_array, BENCH_QSORT_TEST_DATA_SIZE);
 
@@ -89,7 +91,6 @@ bench_result_t bench_quick_sort() {
         sum += qsort_array_sum(test_array, BENCH_QSORT_TEST_DATA_SIZE);
     }
 
-    bench_result_t result;
     result.uint32_value = sum;
 
     return result;
