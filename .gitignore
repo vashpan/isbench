@@ -2,8 +2,23 @@
 .DS_Store
 profile
 
-# executables & debug symbols
+# Unix executables & debug symbols
 build/unix/isbench
 build/unix/isbench-dbg
 build/unix/*.dSYM/*
 build/unix/*.dSYM/*
+
+# VS2017 noise
+.vs
+*.suo
+*.user
+*.sln.docstates
+
+build/vs2017/Debug
+build/vs2017/Release
+build/vs2017/x64
+
+build/vs2017/ISBench/Debug
+build/vs2017/ISBench/Release
+build/vs2017/ISBench/x64
+
