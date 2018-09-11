@@ -29,6 +29,12 @@
 
 #include "utils.h"
 
+void isb_strzero(char* dst, size_t size) {
+    while(--size > 0) {
+        *dst = '\0';
+    }
+}
+
 unsigned isb_strlen(const char* text) {
     unsigned len = 0;
     int i = 0;
@@ -46,4 +52,18 @@ bool isb_iswhitespace(char c) {
     } else {
         return FALSE;
     }
+}
+
+char* isb_strcat(char* dst, const char* txt) {
+    char* save_dst = dst;
+
+    /* find end of string */
+    while(*dst != '\0') {
+        ++dst;
+    } 
+
+    /* add our source text */
+    while((*dst++ = *txt++) != '\0');
+
+    return save_dst;
 }

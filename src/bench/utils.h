@@ -37,7 +37,9 @@
 
 typedef unsigned char bool;
 
+void isb_strzero(char* dst, size_t size);
 unsigned isb_strlen(const char* text);
 bool isb_iswhitespace(char c);
+char* isb_strcat(char* dst, const char* txt);
 
 #endif
