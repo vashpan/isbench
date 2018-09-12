@@ -27,6 +27,7 @@
 
 #include "rle.h"
 #include "rand.h"
+#include "utils.h"
 
 #define RLE_TEST_DATA_SIZE 1024
 
@@ -85,6 +86,9 @@ bench_result_t bench_rle_compression() {
     const int iterations = BENCH_RLE_ITERATIONS;
 
     size_t data_size = RLE_TEST_DATA_SIZE;
+    size_t compressed_size;
+    uint8_t compressed_data[RLE_TEST_DATA_SIZE * 3]; /* compressed data is in worst case 3 times as big */
+
     double compression_factor_sum = 0.0;
     int i;
 
@@ -95,9 +99,8 @@ bench_result_t bench_rle_compression() {
     for(i = 0; i < iterations; ++i) {
         rle_fill_test_data(test_data, RLE_TEST_DATA_SIZE);
 
-        uint8_t compressed_data[RLE_TEST_DATA_SIZE * 3] = { 0 }; /* compressed data is in worst case 3 times as big */
-        size_t compressed_size = 0;
-
+        isb_strzero((char*)compressed_data, RLE_TEST_DATA_SIZE * 3); 
+        compressed_size = 0;
         rle_compress((uint8_t*)test_data, data_size, compressed_data, &compressed_size);
 
         compression_factor_sum += ((double)compressed_size / (double)data_size);
