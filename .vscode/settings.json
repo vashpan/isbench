@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "platform.h": "c",
-        "pstdint.h": "c"
+        "pstdint.h": "c",
+        "utils.h": "c"
     }
 }
