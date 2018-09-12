@@ -26,21 +26,11 @@
 */
 
 #include "rle.h"
+#include "rand.h"
 
-#define BENCH_RLE_TEST_DATA_SIZE 100
+#define RLE_TEST_DATA_SIZE 1024
 
-static const uint8_t test_data[BENCH_RLE_TEST_DATA_SIZE] = { 
-    1, 1, 0, 0, 0, 0, 0, 0, 1, 1,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 1, 0, 0, 0, 0, 1, 1, 0,
-    0, 1, 1, 1, 0, 0, 1, 1, 1, 0,    
-    0, 0, 1, 0, 0, 0, 0, 1, 0, 0,
-    1, 0, 0, 0, 1, 1, 0, 0, 0, 1,
-    1, 1, 0, 0, 0, 0, 0, 0, 1, 1,
-    1, 1, 0, 1, 0, 0, 1, 0, 1, 1
- };
+static uint8_t test_data[RLE_TEST_DATA_SIZE] = { 0 };
 
 static void rle_compress(uint8_t* input, size_t input_size, uint8_t* output, size_t* output_size) {
     size_t n, output_marker;
@@ -74,25 +64,46 @@ static void rle_compress(uint8_t* input, size_t input_size, uint8_t* output, siz
     *output_size = output_marker;
 }
 
+static void rle_fill_test_data(uint8_t data[], size_t size) {
+    size_t i, next_chunk_size;
+    uint8_t next_chunk_value;
+
+    next_chunk_size = 0;
+    for(i = 0; i < size; ++i) {
+        if(next_chunk_size == 0) {
+            next_chunk_size = (size_t)rnd_get_int_range(1, 64);
+            next_chunk_value = (uint8_t)rnd_get_int_range(0, 255);
+        }
+
+        data[i] = next_chunk_value;
+
+        next_chunk_size--;
+    }
+}
+
 bench_result_t bench_rle_compression() {
     const int iterations = BENCH_RLE_ITERATIONS;
 
-    size_t initial_size = BENCH_RLE_TEST_DATA_SIZE;
-    uint32_t sizes_sum = 0;
+    size_t data_size = RLE_TEST_DATA_SIZE;
+    double compression_factor_sum = 0.0;
     int i;
 
     bench_result_t result;
 
+    rnd_init(8657332);
+
     for(i = 0; i < iterations; ++i) {
-        uint8_t compressed_data[BENCH_RLE_TEST_DATA_SIZE * 3] = { 0 }; /* compressed data is in worst case 3 times as big */
+        rle_fill_test_data(test_data, RLE_TEST_DATA_SIZE);
+
+        uint8_t compressed_data[RLE_TEST_DATA_SIZE * 3] = { 0 }; /* compressed data is in worst case 3 times as big */
         size_t compressed_size = 0;
 
-        rle_compress((uint8_t*)test_data, initial_size, compressed_data, &compressed_size);
+        rle_compress((uint8_t*)test_data, data_size, compressed_data, &compressed_size);
 
-        sizes_sum += compressed_size;
+        compression_factor_sum += ((double)compressed_size / (double)data_size);
     }
 
-    result.uint32_value = sizes_sum / iterations;
+    result.double_value = (compression_factor_sum / iterations) * 100.0;
     
     return result;
 }
