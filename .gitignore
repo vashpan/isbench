@@ -17,8 +17,9 @@ build/unix/*.dSYM/*
 build/vs2017/Debug
 build/vs2017/Release
 build/vs2017/x64
+build/vs2017/ARM64
 
 build/vs2017/ISBench/Debug
 build/vs2017/ISBench/Release
 build/vs2017/ISBench/x64
-
+build/vs2017/ISBench/ARM64
