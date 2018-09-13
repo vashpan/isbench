@@ -101,6 +101,29 @@ static void print_results(bench_type type, int64_t iterations[BENCH_TYPE_MAX], b
     }
 }
 
+static void print_score(int64_t iterations[BENCH_TYPE_MAX]) {
+    double points_sum = 0.0, points = 0.0;
+    int type;
+
+    /* baseline results for i486DX4 100Mhz on Windows NT 3.5 */
+    static int64_t baseline[BENCH_TYPE_MAX] = {
+        1330000, /* random numbers */
+        5600, /* word count */
+        6600, /* CRC32 */
+        2850, /* RLE */
+        8180 /* QuickSort */
+    };
+
+    for(type=0; type<BENCH_TYPE_MAX; ++type) {
+        points_sum += (((double)iterations[type] / (double)baseline[type]) * 100.0);
+    }
+
+    points = points_sum / BENCH_TYPE_MAX;
+
+    bench_printf("\nScore: %.2fpts\n", points);
+    bench_printf("100.0pts = i486DX4 100Mhz @ Windows NT 3.5\n");
+}
+
 int bench_main(int argc, char const *argv[]) {
     static int64_t iterations[BENCH_TYPE_MAX] = { 0 };
     static bench_result_t results[BENCH_TYPE_MAX] = { 0.0 };
@@ -109,8 +132,6 @@ int bench_main(int argc, char const *argv[]) {
     uint32_t number_of_iterations;
     double start;
     double current, elapsed_time, time_remainder;
-    
-    int j;
 
     /* start benchmarking */
     bench_printf("Incredibly Simple Benchmark! %s (%d seconds per test) \n\n", ISBENCH_VERSION, (int)BENCH_TIME);
@@ -152,16 +173,15 @@ int bench_main(int argc, char const *argv[]) {
             elapsed_time = current - start;
         } while(elapsed_time <= BENCH_TIME);
 
+        /* include time remainder and modify results accordingly */
+        time_remainder = BENCH_TIME - elapsed_time;
+        iterations[type] += (int64_t)(iterations[type] * (time_remainder / BENCH_TIME));
+
         /* print results for current benchmark */
         print_results(type, iterations, results);
     }
 
-    /* include time remainder and modify results accordingly */
-    time_remainder = BENCH_TIME - elapsed_time;
-    
-    for(j=0; j<BENCH_TYPE_MAX; ++j) {
-        iterations[j] += (int64_t)(iterations[j] * (time_remainder / BENCH_TIME));
-    }
+    print_score(iterations);
 
     return 0;
 }

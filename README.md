@@ -20,7 +20,7 @@ Most sensible results could be get if we use the same binary and OS across multi
 
 ## Benchmarks
 
-Don't expect anything complex, they are mostly here just to make "some" non-trivial work done by the CPU. 
+Don't expect anything complex, they are mostly here just to make "some" non-trivial work done by the CPU. Score is calculated against i486DX4 CPU running on Windows NT 3.5.
 
 ### Random numbers
 
