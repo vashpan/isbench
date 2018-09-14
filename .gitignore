@@ -23,3 +23,13 @@ build/vs2017/ISBench/Debug
 build/vs2017/ISBench/Release
 build/vs2017/ISBench/x64
 build/vs2017/ISBench/ARM64
+
+# XCode noise
+*.pbxuser
+*.mode1v3
+*.mode2v3
+
+*.xcodeproj/xcuserdata/*
+*.xcodeproj/project.xcworkspace/*
+*.xcuserstate
+**/xcschemes/*
