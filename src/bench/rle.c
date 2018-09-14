@@ -66,8 +66,8 @@ static void rle_compress(uint8_t* input, size_t input_size, uint8_t* output, siz
 }
 
 static void rle_fill_test_data(uint8_t data[], size_t size) {
-    size_t i, next_chunk_size;
-    uint8_t next_chunk_value;
+    size_t i, next_chunk_size = 0;
+    uint8_t next_chunk_value = 0;
 
     next_chunk_size = 0;
     for(i = 0; i < size; ++i) {
