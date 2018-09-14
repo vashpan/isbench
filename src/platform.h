@@ -38,6 +38,6 @@ void bench_printf(const char * format, ...);
 void bench_snprintf(char* str, unsigned len, const char* format, ...);
 
 /* time functions */
-double bench_get_time(); /* returns time since epoch, in seconds */
+double bench_get_time(void); /* returns time since epoch, in seconds */
 
 #endif

@@ -32,6 +32,6 @@
 
 #define BENCH_WC_ITERATIONS 500
 
-bench_result_t bench_word_count();
+bench_result_t bench_word_count(void);
 
 #endif

@@ -34,11 +34,11 @@
 
 void rnd_init(int seed);
 
-int rnd_get_int();
+int rnd_get_int(void);
 int rnd_get_int_range(int from, int to);
-float rnd_get_float();
-double rnd_get_double();
+float rnd_get_float(void);
+double rnd_get_double(void);
 
-bench_result_t bench_random_numbers();
+bench_result_t bench_random_numbers(void);
 
 #endif

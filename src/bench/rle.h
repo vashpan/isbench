@@ -32,6 +32,6 @@
 
 #define BENCH_RLE_ITERATIONS 250
 
-bench_result_t bench_rle_compression();
+bench_result_t bench_rle_compression(void);
 
 #endif
