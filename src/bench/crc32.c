@@ -44,12 +44,12 @@ static uint32_t crc32_for_byte(uint32_t r) {
 }
 
 static void crc32(const void *data, size_t n_bytes, uint32_t* crc) {
-    static uint32_t table[0x100];
+    static uint32_t table[0x100] = { 0 };
     size_t i;
 
     if(!*table) {
         for(i = 0; i < 0x100; ++i) {
-            table[i] = crc32_for_byte(i);
+            table[i] = crc32_for_byte((uint32_t)i);
         }
     }
 
