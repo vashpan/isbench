@@ -64,8 +64,5 @@ void bench_snprintf(char* str, unsigned len, const char* format, ...) {
 }
 
 double bench_get_time() {
-    struct timespec tp;
-    clock_gettime(CLOCK_MONOTONIC, &tp);
-
-    return (double)(tp.tv_sec + (tp.tv_nsec / 1E9));
+    return (double)CACurrentMediaTime();
 }
