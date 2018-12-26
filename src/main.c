@@ -27,13 +27,8 @@
 */
 
 #include "platform.h"
-
-#include "bench/result.h"
-#include "bench/rand.h"
-#include "bench/wc.h"
-#include "bench/crc32.h"
-#include "bench/rle.h"
-#include "bench/qsort.h"
+#include "utils.h"
+#include "bench.h"
 
 #define ISBENCH_VERSION "1.0.0"
 

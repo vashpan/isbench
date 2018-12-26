@@ -1,10 +1,11 @@
 /*
 *  isbench
-*  crc32.h
+*  bench.h
 *
-*  CRC32 checksum benchmark
+*  Main entry point and user interface of the benchmark, relies on platform-defined 
+*  functions. 
 *
-*  Copyright © 2018 Konrad Kołakowski
+*  Copyright ©2018 Konrad Kołakowski
 *
 *  Permission is hereby granted, free of charge, to any person obtaining 
 *  a copy of this software and associated documentation files (the "Software"),
@@ -25,13 +26,19 @@
 *  DEALINGS IN THE SOFTWARE.
 */
 
-#include "result.h"
+#ifndef _BENCH_H
+#define _BENCH_H
 
-#ifndef _CRC32_H
-#define _CRC32_H
-
+#define BENCH_RND_ITERATIONS 1000
+#define BENCH_WC_ITERATIONS 500
 #define BENCH_CRC32_ITERATIONS 1000
+#define BENCH_RLE_ITERATIONS 250
+#define BENCH_QSORT_ITERATIONS 100
 
+bench_result_t bench_random_numbers(void);
+bench_result_t bench_word_count(void);
 bench_result_t bench_crc32_hashes(void);
+bench_result_t bench_rle_compression(void);
+bench_result_t bench_quick_sort(void);
 
 #endif
