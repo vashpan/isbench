@@ -35,6 +35,12 @@
 #define BENCH_RLE_ITERATIONS 250
 #define BENCH_QSORT_ITERATIONS 100
 
+typedef union {
+    double double_value;
+    uint32_t uint32_value;
+    int int_value;
+} bench_result_t;
+
 bench_result_t bench_random_numbers(void);
 bench_result_t bench_word_count(void);
 bench_result_t bench_crc32_hashes(void);
