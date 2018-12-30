@@ -163,7 +163,7 @@ static void wc_create_test_text(char* text, int number_of_words, size_t max_size
 
 #define CRC32_TEST_DATA_SIZE 128
 
-static char test_data[CRC32_TEST_DATA_SIZE] = { 0 };
+static char test_crc32_data[CRC32_TEST_DATA_SIZE] = { 0 };
 
 static uint32_t crc32_for_byte(uint32_t r) {
 	int j;
@@ -202,7 +202,7 @@ static void crc32_fill_test_data(char array[], size_t size) {
 
 #define RLE_TEST_DATA_SIZE 1024
 
-static uint8_t test_data[RLE_TEST_DATA_SIZE] = { 0 };
+static uint8_t test_rle_data[RLE_TEST_DATA_SIZE] = { 0 };
 
 static void rle_compress(uint8_t* input, size_t input_size, uint8_t* output, size_t* output_size) {
     size_t n, output_marker;
@@ -361,9 +361,9 @@ bench_result_t bench_crc32_hashes() {
     rnd_init(8657332);
 
     for(i = 0; i < iterations; ++i) {
-        crc32_fill_test_data(test_data, CRC32_TEST_DATA_SIZE);
+        crc32_fill_test_data(test_crc32_data, CRC32_TEST_DATA_SIZE);
 
-        crc32(test_data, CRC32_TEST_DATA_SIZE, &crc32num); /* do not include nul character at the end of the string */
+        crc32(test_crc32_data, CRC32_TEST_DATA_SIZE, &crc32num); /* do not include nul character at the end of the string */
         result_hash ^= crc32num;
     }
 
@@ -387,11 +387,11 @@ bench_result_t bench_rle_compression() {
     rnd_init(8657332);
 
     for(i = 0; i < iterations; ++i) {
-        rle_fill_test_data(test_data, RLE_TEST_DATA_SIZE);
+        rle_fill_test_data(test_rle_data, RLE_TEST_DATA_SIZE);
 
         isb_strzero((char*)compressed_data, RLE_TEST_DATA_SIZE * 3); 
         compressed_size = 0;
-        rle_compress((uint8_t*)test_data, data_size, compressed_data, &compressed_size);
+        rle_compress((uint8_t*)test_rle_data, data_size, compressed_data, &compressed_size);
 
         compression_factor_sum += ((double)compressed_size / (double)data_size);
     }
