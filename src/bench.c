@@ -255,6 +255,8 @@ static void rle_fill_test_data(uint8_t data[], size_t size) {
 
 /* Quick sort */
 
+#define BENCH_QSORT_TEST_DATA_SIZE 64
+
 static int test_array[BENCH_QSORT_TEST_DATA_SIZE] = { 0 };
 
 static void qsort_fill_test_data(int array[], size_t size) {
