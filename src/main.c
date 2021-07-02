@@ -1,6 +1,6 @@
 /*
 *  isbench
-*  bmain.c
+*  main.c
 *
 *  Main entry point and user interface of the benchmark, relies on platform-defined 
 *  functions. 

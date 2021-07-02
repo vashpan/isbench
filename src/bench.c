@@ -1,6 +1,6 @@
 /*
 *  isbench
-*  bmain.c
+*  bench.c
 *
 *  Main entry point and user interface of the benchmark, relies on platform-defined 
 *  functions. 
@@ -29,7 +29,9 @@
 #include "utils.h"
 #include "bench.h"
 
-/* Random numbers */
+/********************************************************************************/
+/******************************** RANDOM NUMBERS ********************************/
+/********************************************************************************/
 
 #define BENCH_RND_SEED 4345
 
@@ -59,7 +61,9 @@ static double rnd_get_double() {
     return (double)(rnd_get_int()) / (double)rnd_max;
 }
 
-/* Word count */
+/********************************************************************************/
+/********************************** WORD COUNT **********************************/
+/********************************************************************************/
 
 #define WC_TEST_WORDS_NUMBER 32
 #define WC_MAX_TEST_DATA_SIZE 512 /* check if the longest word times max words number doesn't exceed this value! */
@@ -159,7 +163,9 @@ static void wc_create_test_text(char* text, int number_of_words, size_t max_size
     }
 }
 
-/* CRC32 */
+/********************************************************************************/
+/************************************ CRC32 *************************************/
+/********************************************************************************/
 
 #define CRC32_TEST_DATA_SIZE 128
 
@@ -198,7 +204,9 @@ static void crc32_fill_test_data(char array[], size_t size) {
     }
 }
 
-/* RLE Compression */
+/********************************************************************************/
+/******************************* RLE COMPRESSION ********************************/
+/********************************************************************************/
 
 #define RLE_TEST_DATA_SIZE 1024
 
@@ -253,7 +261,9 @@ static void rle_fill_test_data(uint8_t data[], size_t size) {
     }
 }
 
-/* Quick sort */
+/********************************************************************************/
+/********************************** QUICK SORT **********************************/
+/********************************************************************************/
 
 #define BENCH_QSORT_TEST_DATA_SIZE 64
 
@@ -302,7 +312,9 @@ static void qsort(int array[], int l, int r) {
     if(r > i) qsort(array, i, r);
 }
 
-/* Benchmarks API */
+/********************************************************************************/
+/******************************** BENCHMARKS API ********************************/
+/********************************************************************************/
 
 bench_result_t bench_random_numbers() {
     const int iterations = BENCH_RND_ITERATIONS;
