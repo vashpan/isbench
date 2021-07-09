@@ -27,10 +27,10 @@
 *  DEALINGS IN THE SOFTWARE.
 */
 
-#include "platform/pstdint.h"
-
 #ifndef _UTILS_H
 #define _UTILS_H
+
+#include "platform.h"
 
 #define TRUE 1
 #define FALSE 0

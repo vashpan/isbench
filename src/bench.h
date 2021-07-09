@@ -29,6 +29,8 @@
 #ifndef _BENCH_H
 #define _BENCH_H
 
+#include "platform.h"
+
 #define BENCH_RND_ITERATIONS 1000
 #define BENCH_WC_ITERATIONS 500
 #define BENCH_CRC32_ITERATIONS 1000
