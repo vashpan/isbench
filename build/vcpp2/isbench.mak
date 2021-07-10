@@ -42,14 +42,14 @@ RSC=rc.exe
 OUTDIR=.\WinRel
 INTDIR=.\WinRel
 
-ALL : .\WinRel\isbench.exe .\WinRel\isbench.bsc
+ALL : $(OUTDIR)/isbench.exe $(OUTDIR)/isbench.bsc
 
 $(OUTDIR) : 
     if not exist $(OUTDIR)/nul mkdir $(OUTDIR)
 
-# ADD BASE CPP /nologo /ML /W3 /GX /YX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /FR /c
-# ADD CPP /nologo /ML /W3 /GX /YX /O2 /I "..\..\src" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /FR /c
-CPP_PROJ=/nologo /ML /W3 /GX /YX /O2 /I "..\..\src" /D "WIN32" /D "NDEBUG" /D\
+# ADD BASE CPP /nologo /W3 /GX /YX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /FR /c
+# ADD CPP /nologo /W3 /GX /YX /O2 /I "..\..\src" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /FR /c
+CPP_PROJ=/nologo /W3 /GX /YX /O2 /I "..\..\src" /D "WIN32" /D "NDEBUG" /D\
  "_CONSOLE" /FR$(INTDIR)/ /Fp$(OUTDIR)/"isbench.pch" /Fo$(INTDIR)/ /c 
 CPP_OBJS=.\WinRel/
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,17 +59,13 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 BSC32_FLAGS=/nologo /o$(OUTDIR)/"isbench.bsc" 
 BSC32_SBRS= \
-	.\WinRel\main.sbr \
-	.\WinRel\rle.sbr \
-	.\WinRel\qsort.sbr \
-	.\WinRel\wc.sbr \
-	.\WinRel\utils.sbr \
-	.\WinRel\rand.sbr \
-	.\WinRel\crc32.sbr \
-	.\WinRel\winmain.sbr \
-	.\WinRel\platform.sbr
+	$(INTDIR)/main.sbr \
+	$(INTDIR)/utils.sbr \
+	$(INTDIR)/bench.sbr \
+	$(INTDIR)/winmain.sbr \
+	$(INTDIR)/platform.sbr
 
-.\WinRel\isbench.bsc : $(OUTDIR)  $(BSC32_SBRS)
+$(OUTDIR)/isbench.bsc : $(OUTDIR)  $(BSC32_SBRS)
     $(BSC32) @<<
   $(BSC32_FLAGS) $(BSC32_SBRS)
 <<
@@ -84,17 +80,13 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  /OUT:$(OUTDIR)/"isbench.exe" 
 DEF_FILE=
 LINK32_OBJS= \
-	.\WinRel\main.obj \
-	.\WinRel\rle.obj \
-	.\WinRel\qsort.obj \
-	.\WinRel\wc.obj \
-	.\WinRel\utils.obj \
-	.\WinRel\rand.obj \
-	.\WinRel\crc32.obj \
-	.\WinRel\winmain.obj \
-	.\WinRel\platform.obj
+	$(INTDIR)/main.obj \
+	$(INTDIR)/utils.obj \
+	$(INTDIR)/bench.obj \
+	$(INTDIR)/winmain.obj \
+	$(INTDIR)/platform.obj
 
-.\WinRel\isbench.exe : $(OUTDIR)  $(DEF_FILE) $(LINK32_OBJS)
+$(OUTDIR)/isbench.exe : $(OUTDIR)  $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
@@ -112,15 +104,15 @@ LINK32_OBJS= \
 OUTDIR=.\WinDebug
 INTDIR=.\WinDebug
 
-ALL : .\WinDebug\isbench.exe .\WinDebug\isbench.bsc
+ALL : $(OUTDIR)/isbench.exe $(OUTDIR)/isbench.bsc
 
 $(OUTDIR) : 
     if not exist $(OUTDIR)/nul mkdir $(OUTDIR)
 
-# ADD BASE CPP /nologo /ML /W3 /GX /Zi /YX /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /FR /c
-# ADD CPP /nologo /ML /W3 /GX /Zi /YX /Od /I "..\..\src" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /FR /c
-CPP_PROJ=/nologo /ML /W3 /GX /Zi /YX /Od /I "..\..\src" /D "WIN32" /D "_DEBUG"\
- /D "_CONSOLE" /FR$(INTDIR)/ /Fp$(OUTDIR)/"isbench.pch" /Fo$(INTDIR)/\
+# ADD BASE CPP /nologo /W3 /GX /Zi /YX /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /FR /c
+# ADD CPP /nologo /W3 /GX /Zi /YX /Od /I "..\..\src" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /FR /c
+CPP_PROJ=/nologo /W3 /GX /Zi /YX /Od /I "..\..\src" /D "WIN32" /D "_DEBUG" /D\
+ "_CONSOLE" /FR$(INTDIR)/ /Fp$(OUTDIR)/"isbench.pch" /Fo$(INTDIR)/\
  /Fd$(OUTDIR)/"isbench.pdb" /c 
 CPP_OBJS=.\WinDebug/
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -130,17 +122,13 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 BSC32_FLAGS=/nologo /o$(OUTDIR)/"isbench.bsc" 
 BSC32_SBRS= \
-	.\WinDebug\main.sbr \
-	.\WinDebug\rle.sbr \
-	.\WinDebug\qsort.sbr \
-	.\WinDebug\wc.sbr \
-	.\WinDebug\utils.sbr \
-	.\WinDebug\rand.sbr \
-	.\WinDebug\crc32.sbr \
-	.\WinDebug\winmain.sbr \
-	.\WinDebug\platform.sbr
+	$(INTDIR)/main.sbr \
+	$(INTDIR)/utils.sbr \
+	$(INTDIR)/bench.sbr \
+	$(INTDIR)/winmain.sbr \
+	$(INTDIR)/platform.sbr
 
-.\WinDebug\isbench.bsc : $(OUTDIR)  $(BSC32_SBRS)
+$(OUTDIR)/isbench.bsc : $(OUTDIR)  $(BSC32_SBRS)
     $(BSC32) @<<
   $(BSC32_FLAGS) $(BSC32_SBRS)
 <<
@@ -154,17 +142,13 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  /MACHINE:I386 /OUT:$(OUTDIR)/"isbench.exe" 
 DEF_FILE=
 LINK32_OBJS= \
-	.\WinDebug\main.obj \
-	.\WinDebug\rle.obj \
-	.\WinDebug\qsort.obj \
-	.\WinDebug\wc.obj \
-	.\WinDebug\utils.obj \
-	.\WinDebug\rand.obj \
-	.\WinDebug\crc32.obj \
-	.\WinDebug\winmain.obj \
-	.\WinDebug\platform.obj
+	$(INTDIR)/main.obj \
+	$(INTDIR)/utils.obj \
+	$(INTDIR)/bench.obj \
+	$(INTDIR)/winmain.obj \
+	$(INTDIR)/platform.obj
 
-.\WinDebug\isbench.exe : $(OUTDIR)  $(DEF_FILE) $(LINK32_OBJS)
+$(OUTDIR)/isbench.exe : $(OUTDIR)  $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
@@ -193,17 +177,8 @@ SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\platform.h
 
 SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\main.c
 
-!IF  "$(CFG)" == "Win32 Release"
-
-.\WinRel\main.obj :  $(SOURCE)  $(INTDIR)
+$(INTDIR)/main.obj :  $(SOURCE)  $(INTDIR)
    $(CPP) $(CPP_PROJ)  $(SOURCE) 
-
-!ELSEIF  "$(CFG)" == "Win32 Debug"
-
-.\WinDebug\main.obj :  $(SOURCE)  $(INTDIR)
-   $(CPP) $(CPP_PROJ)  $(SOURCE) 
-
-!ENDIF 
 
 # End Source File
 # End Group
@@ -213,144 +188,29 @@ SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\main.c
 ################################################################################
 # Begin Source File
 
-SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\bench\rle.c
+SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\bench.h
+# End Source File
+################################################################################
+# Begin Source File
 
-!IF  "$(CFG)" == "Win32 Release"
+SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\utils.c
 
-.\WinRel\rle.obj :  $(SOURCE)  $(INTDIR)
+$(INTDIR)/utils.obj :  $(SOURCE)  $(INTDIR)
    $(CPP) $(CPP_PROJ)  $(SOURCE) 
-
-!ELSEIF  "$(CFG)" == "Win32 Debug"
-
-.\WinDebug\rle.obj :  $(SOURCE)  $(INTDIR)
-   $(CPP) $(CPP_PROJ)  $(SOURCE) 
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
-SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\bench\crc32.h
+SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\utils.h
 # End Source File
 ################################################################################
 # Begin Source File
 
-SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\bench\rle.h
-# End Source File
-################################################################################
-# Begin Source File
+SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\bench.c
 
-SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\bench\qsort.c
-
-!IF  "$(CFG)" == "Win32 Release"
-
-.\WinRel\qsort.obj :  $(SOURCE)  $(INTDIR)
+$(INTDIR)/bench.obj :  $(SOURCE)  $(INTDIR)
    $(CPP) $(CPP_PROJ)  $(SOURCE) 
-
-!ELSEIF  "$(CFG)" == "Win32 Debug"
-
-.\WinDebug\qsort.obj :  $(SOURCE)  $(INTDIR)
-   $(CPP) $(CPP_PROJ)  $(SOURCE) 
-
-!ENDIF 
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\bench\qsort.h
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\bench\wc.c
-
-!IF  "$(CFG)" == "Win32 Release"
-
-.\WinRel\wc.obj :  $(SOURCE)  $(INTDIR)
-   $(CPP) $(CPP_PROJ)  $(SOURCE) 
-
-!ELSEIF  "$(CFG)" == "Win32 Debug"
-
-.\WinDebug\wc.obj :  $(SOURCE)  $(INTDIR)
-   $(CPP) $(CPP_PROJ)  $(SOURCE) 
-
-!ENDIF 
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\bench\wc.h
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\bench\result.h
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\bench\utils.c
-
-!IF  "$(CFG)" == "Win32 Release"
-
-.\WinRel\utils.obj :  $(SOURCE)  $(INTDIR)
-   $(CPP) $(CPP_PROJ)  $(SOURCE) 
-
-!ELSEIF  "$(CFG)" == "Win32 Debug"
-
-.\WinDebug\utils.obj :  $(SOURCE)  $(INTDIR)
-   $(CPP) $(CPP_PROJ)  $(SOURCE) 
-
-!ENDIF 
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\bench\rand.c
-
-!IF  "$(CFG)" == "Win32 Release"
-
-.\WinRel\rand.obj :  $(SOURCE)  $(INTDIR)
-   $(CPP) $(CPP_PROJ)  $(SOURCE) 
-
-!ELSEIF  "$(CFG)" == "Win32 Debug"
-
-.\WinDebug\rand.obj :  $(SOURCE)  $(INTDIR)
-   $(CPP) $(CPP_PROJ)  $(SOURCE) 
-
-!ENDIF 
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\bench\utils.h
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\bench\rand.h
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\bench\crc32.c
-
-!IF  "$(CFG)" == "Win32 Release"
-
-.\WinRel\crc32.obj :  $(SOURCE)  $(INTDIR)
-   $(CPP) $(CPP_PROJ)  $(SOURCE) 
-
-!ELSEIF  "$(CFG)" == "Win32 Debug"
-
-.\WinDebug\crc32.obj :  $(SOURCE)  $(INTDIR)
-   $(CPP) $(CPP_PROJ)  $(SOURCE) 
-
-!ENDIF 
 
 # End Source File
 # End Group
@@ -369,17 +229,8 @@ SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\platform\win32\winmain.c
 DEP_WINMA=\
 	\USERS\KONRAD\PROJECTS\isbench\src\platform.h
 
-!IF  "$(CFG)" == "Win32 Release"
-
-.\WinRel\winmain.obj :  $(SOURCE)  $(DEP_WINMA) $(INTDIR)
+$(INTDIR)/winmain.obj :  $(SOURCE)  $(DEP_WINMA) $(INTDIR)
    $(CPP) $(CPP_PROJ)  $(SOURCE) 
-
-!ELSEIF  "$(CFG)" == "Win32 Debug"
-
-.\WinDebug\winmain.obj :  $(SOURCE)  $(DEP_WINMA) $(INTDIR)
-   $(CPP) $(CPP_PROJ)  $(SOURCE) 
-
-!ENDIF 
 
 # End Source File
 ################################################################################
@@ -389,17 +240,8 @@ SOURCE=\USERS\KONRAD\PROJECTS\isbench\src\platform\win32\platform.c
 DEP_PLATF=\
 	\USERS\KONRAD\PROJECTS\isbench\src\platform.h
 
-!IF  "$(CFG)" == "Win32 Release"
-
-.\WinRel\platform.obj :  $(SOURCE)  $(DEP_PLATF) $(INTDIR)
+$(INTDIR)/platform.obj :  $(SOURCE)  $(DEP_PLATF) $(INTDIR)
    $(CPP) $(CPP_PROJ)  $(SOURCE) 
-
-!ELSEIF  "$(CFG)" == "Win32 Debug"
-
-.\WinDebug\platform.obj :  $(SOURCE)  $(DEP_PLATF) $(INTDIR)
-   $(CPP) $(CPP_PROJ)  $(SOURCE) 
-
-!ENDIF 
 
 # End Source File
 # End Group
