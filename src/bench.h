@@ -1,10 +1,11 @@
 /*
 *  isbench
-*  rand.c
+*  bench.h
 *
-*  Random number generator benchmark
+*  Main entry point and user interface of the benchmark, relies on platform-defined 
+*  functions. 
 *
-*  Copyright © 2018 Konrad Kołakowski
+*  Copyright ©2018 Konrad Kołakowski
 *
 *  Permission is hereby granted, free of charge, to any person obtaining 
 *  a copy of this software and associated documentation files (the "Software"),
@@ -25,54 +26,27 @@
 *  DEALINGS IN THE SOFTWARE.
 */
 
-#include "rand.h"
+#ifndef _BENCH_H
+#define _BENCH_H
 
-#define BENCH_RND_SEED 4345
+#include "platform.h"
 
-static int rnd_state = 0;
-static const int rnd_max = ((1U << 15) - 1);
+#define BENCH_RND_ITERATIONS 1000
+#define BENCH_WC_ITERATIONS 500
+#define BENCH_CRC32_ITERATIONS 1000
+#define BENCH_RLE_ITERATIONS 250
+#define BENCH_QSORT_ITERATIONS 100
 
-void rnd_init(int seed) {
-    rnd_state = seed;
-}
+typedef union {
+    double double_value;
+    uint32_t uint32_value;
+    int int_value;
+} bench_result_t;
 
-int rnd_get_int() {
-    rnd_state = (rnd_state * 214013 + 2531011) & rnd_max;
-	return rnd_state;
-}
+bench_result_t bench_random_numbers(void);
+bench_result_t bench_word_count(void);
+bench_result_t bench_crc32_hashes(void);
+bench_result_t bench_rle_compression(void);
+bench_result_t bench_quick_sort(void);
 
-int rnd_get_int_range(int from, int to) {
-    int range = to - from;
-
-	return from + rnd_get_int() % range;
-}
-
-float rnd_get_float() {
-    return (float)(rnd_get_int()) / (float)rnd_max;
-}
-
-double rnd_get_double() {
-    return (double)(rnd_get_int()) / (double)rnd_max;
-}
-
-bench_result_t bench_random_numbers() {
-    const int iterations = BENCH_RND_ITERATIONS;
-    const int seed = BENCH_RND_SEED;
-    
-    int i = 0;
-    double avg;
-    
-    bench_result_t result;
-
-    rnd_init(seed);
-
-    avg = 0.0;
-    for(i = 0; i < iterations; ++i) {
-        avg += rnd_get_int();
-        avg /= 2.0;
-    }
-
-    result.double_value = avg;
-    
-    return result;
-}
+#endif

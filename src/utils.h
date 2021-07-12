@@ -1,10 +1,12 @@
 /*
 *  isbench
-*  crc32.h
+*  utils.h
 *
-*  CRC32 checksum benchmark
+*  Common utility functions used by benchmark code.
+*  Many of them are just reimplementation of standard library functions.
+*  They are implemented here to avoid standard-library dependency on performance.
 *
-*  Copyright © 2018 Konrad Kołakowski
+*  Copyright ©2018 Konrad Kołakowski
 *
 *  Permission is hereby granted, free of charge, to any person obtaining 
 *  a copy of this software and associated documentation files (the "Software"),
@@ -25,13 +27,19 @@
 *  DEALINGS IN THE SOFTWARE.
 */
 
-#include "result.h"
+#ifndef _UTILS_H
+#define _UTILS_H
 
-#ifndef _CRC32_H
-#define _CRC32_H
+#include "platform.h"
 
-#define BENCH_CRC32_ITERATIONS 1000
+#define TRUE 1
+#define FALSE 0
 
-bench_result_t bench_crc32_hashes(void);
+typedef unsigned char bool;
+
+void isb_strzero(char* dst, size_t size);
+unsigned isb_strlen(const char* text);
+bool isb_iswhitespace(char c);
+char* isb_strcat(char* dst, const char* txt);
 
 #endif
