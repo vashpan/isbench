@@ -14,15 +14,15 @@ build/unix/*.dSYM/*
 *.user
 *.sln.docstates
 
-build/vs2017/Debug
-build/vs2017/Release
-build/vs2017/x64
-build/vs2017/ARM64
+build/vs2019/Debug
+build/vs2019/Release
+build/vs2019/x64
+build/vs2019/ARM64
 
-build/vs2017/ISBench/Debug
-build/vs2017/ISBench/Release
-build/vs2017/ISBench/x64
-build/vs2017/ISBench/ARM64
+build/vs2019/ISBench/Debug
+build/vs2019/ISBench/Release
+build/vs2019/ISBench/x64
+build/vs2019/ISBench/ARM64
 
 # XCode noise
 *.pbxuser
