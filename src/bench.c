@@ -53,14 +53,6 @@ static int rnd_get_int_range(int from, int to) {
 	return from + rnd_get_int() % range;
 }
 
-static float rnd_get_float() {
-    return (float)(rnd_get_int()) / (float)rnd_max;
-}
-
-static double rnd_get_double() {
-    return (double)(rnd_get_int()) / (double)rnd_max;
-}
-
 /********************************************************************************/
 /********************************** WORD COUNT **********************************/
 /********************************************************************************/
