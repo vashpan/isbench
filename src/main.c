@@ -102,11 +102,11 @@ static void print_score(int64_t iterations[BENCH_TYPE_MAX]) {
 
     /* baseline results for i486DX4 100Mhz on Windows NT 3.5 */
     static int64_t baseline[BENCH_TYPE_MAX] = {
-        1330000, /* random numbers */
-        5600, /* word count */
-        6600, /* CRC32 */
-        2850, /* RLE */
-        8180 /* QuickSort */
+        1500000, /* random numbers */
+        6800, /* word count */
+        6700, /* CRC32 */
+        3500, /* RLE */
+        8700 /* QuickSort */
     };
 
     for(type=0; type<BENCH_TYPE_MAX; ++type) {
