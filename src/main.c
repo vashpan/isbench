@@ -116,7 +116,6 @@ static void print_score(int64_t iterations[BENCH_TYPE_MAX]) {
     points = points_sum / BENCH_TYPE_MAX;
 
     bench_printf("\nScore: %.2fpts\n", points);
-    bench_printf("100.0pts = i486DX4 100Mhz @ Windows NT 3.5\n");
 }
 
 int bench_main(int argc, char const *argv[]) {
