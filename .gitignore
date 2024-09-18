@@ -8,11 +8,20 @@ build/unix/isbench-dbg
 build/unix/*.dSYM/*
 build/unix/*.dSYM/*
 
-# VS2017 noise
+# VC++ 6.0 noise
+build/vcpp6/*.opt
+build/vcpp6/*.ncb
+build/vcpp6/*.plg
+build/vcpp6/*.001
+build/vcpp6/*.vcp
+build/vcpp6/WinDebug
+build/vcpp6/WinRel
+
+# VS2019+ noise
 .vs
-*.suo
-*.user
-*.sln.docstates
+build/vs2019/*.suo
+build/vs2019/*.user
+build/vs2019/*.sln.docstates
 
 build/vs2019/Debug
 build/vs2019/Release
