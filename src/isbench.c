@@ -1,6 +1,6 @@
 /*
 *  isbench
-*  bench.c
+*  isbench.c
 *
 *  Main entry point and user interface of the benchmark, relies on platform-defined 
 *  functions. 
@@ -26,12 +26,87 @@
 *  DEALINGS IN THE SOFTWARE.
 */
 
-#include "utils.h"
-#include "bench.h"
+#include "platform.h"
+
+#define TRUE 1
+#define FALSE 0
+
+#define ISBENCH_VERSION "1.0.0"
+#define BENCH_TIME 5.0 /* benchmark time of one test in seconds */
+#define NUMBER_STRING_SIZE 128 /* maximum size of score string */
+
+#define BENCH_RND_ITERATIONS 1000
+#define BENCH_WC_ITERATIONS 500
+#define BENCH_CRC32_ITERATIONS 1000
+#define BENCH_RLE_ITERATIONS 250
+#define BENCH_QSORT_ITERATIONS 100
+
+typedef unsigned char bool;
+
+typedef enum {
+    BENCH_TYPE_RAND = 0,
+    BENCH_TYPE_WC,
+    BENCH_TYPE_CRC32,
+    BENCH_TYPE_RLE,
+    BENCH_TYPE_QSORT,
+
+    BENCH_TYPE_MAX
+} bench_type;
+
+typedef union {
+    double double_value;
+    uint32_t uint32_value;
+    int int_value;
+} bench_result_t;
 
 /********************************************************************************/
-/******************************** RANDOM NUMBERS ********************************/
+/********************************** UTILITIES ***********************************/
 /********************************************************************************/
+
+static void isb_strzero(char* dst, size_t size) {
+    while(--size > 0) {
+        *dst = '\0';
+    }
+}
+
+static unsigned isb_strlen(const char* text) {
+    unsigned len = 0;
+    int i = 0;
+
+    for(i=0; text[i] != 0; ++i) {
+        len++;
+    }
+
+    return len;
+}
+
+static bool isb_iswhitespace(char c) {
+    if(c == '\n' || c == ' ' || c == '\t' || c == '\r') {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
+static char* isb_strcat(char* dst, const char* txt) {
+    char* save_dst = dst;
+
+    /* find end of string */
+    while(*dst != '\0') {
+        ++dst;
+    } 
+
+    /* add our source text */
+    while((*dst++ = *txt++) != '\0');
+
+    return save_dst;
+}
+
+/********************************************************************************/
+/********************************** BENCHMARKS **********************************/
+/********************************************************************************/
+
+/* RANDOM NUMBERS */
 
 #define BENCH_RND_SEED 4345
 
@@ -53,9 +128,7 @@ static int rnd_get_int_range(int from, int to) {
 	return from + rnd_get_int() % range;
 }
 
-/********************************************************************************/
-/********************************** WORD COUNT **********************************/
-/********************************************************************************/
+/* WORD COUNT */
 
 #define WC_TEST_WORDS_NUMBER 32
 #define WC_MAX_TEST_DATA_SIZE 512 /* check if the longest word times max words number doesn't exceed this value! */
@@ -155,9 +228,7 @@ static void wc_create_test_text(char* text, int number_of_words, size_t max_size
     }
 }
 
-/********************************************************************************/
-/************************************ CRC32 *************************************/
-/********************************************************************************/
+/* CRC 32 */
 
 #define CRC32_TEST_DATA_SIZE 128
 
@@ -196,9 +267,7 @@ static void crc32_fill_test_data(char array[], size_t size) {
     }
 }
 
-/********************************************************************************/
-/******************************* RLE COMPRESSION ********************************/
-/********************************************************************************/
+/* RLE COMPRESSION */
 
 #define RLE_TEST_DATA_SIZE 1024
 
@@ -253,9 +322,7 @@ static void rle_fill_test_data(uint8_t data[], size_t size) {
     }
 }
 
-/********************************************************************************/
-/********************************** QUICK SORT **********************************/
-/********************************************************************************/
+/* QUICK SORT */
 
 #define BENCH_QSORT_TEST_DATA_SIZE 64
 
@@ -308,7 +375,7 @@ static void qsort(int array[], int l, int r) {
 /******************************** BENCHMARKS API ********************************/
 /********************************************************************************/
 
-bench_result_t bench_random_numbers() {
+static bench_result_t bench_random_numbers() {
     const int iterations = BENCH_RND_ITERATIONS;
     const int seed = BENCH_RND_SEED;
     
@@ -330,7 +397,7 @@ bench_result_t bench_random_numbers() {
     return result;
 }
 
-bench_result_t bench_word_count() {
+static bench_result_t bench_word_count() {
     const int iterations = BENCH_WC_ITERATIONS;
 
     int number_of_words;
@@ -355,7 +422,7 @@ bench_result_t bench_word_count() {
     return result;
 }
 
-bench_result_t bench_crc32_hashes() {
+static bench_result_t bench_crc32_hashes() {
     const int iterations = BENCH_CRC32_ITERATIONS;
 
     uint32_t crc32num;
@@ -378,7 +445,7 @@ bench_result_t bench_crc32_hashes() {
     return result;
 }
 
-bench_result_t bench_rle_compression() {
+static bench_result_t bench_rle_compression() {
     const int iterations = BENCH_RLE_ITERATIONS;
 
     size_t data_size = RLE_TEST_DATA_SIZE;
@@ -407,7 +474,7 @@ bench_result_t bench_rle_compression() {
     return result;
 }
 
-bench_result_t bench_quick_sort() {
+static bench_result_t bench_quick_sort() {
     const size_t iterations = BENCH_QSORT_TEST_DATA_SIZE;
     
     size_t i;
@@ -426,4 +493,142 @@ bench_result_t bench_quick_sort() {
     result.uint32_value = sum;
 
     return result;
+}
+
+/********************************************************************************/
+/********************************* MAIN DRIVER **********************************/
+/********************************************************************************/
+
+static void format_score_number(int64_t number, char* result, unsigned result_size) {
+    double new_value = (double)number;
+    int multiplier = 0;
+    const int limit = 3; /* billions at most */
+    char size_postfix;
+
+    /* divide number until to at least k */
+    while(new_value > 1000.0 && multiplier <= limit) {
+        new_value /= 1000.0;
+        multiplier++;
+    } 
+
+    /* format value properly */
+    switch (multiplier) {
+        case 1:
+            size_postfix = 'k';
+            break;
+        
+        case 2:
+           size_postfix = 'M';
+           break;
+
+        case 3:
+            size_postfix = 'G';
+            break;
+
+        default:
+            size_postfix = 0;
+            break;
+    }
+
+    bench_snprintf(result, result_size, "%.1f%c", new_value, size_postfix);
+}
+
+static void print_results(bench_type type, int64_t iterations[BENCH_TYPE_MAX], bench_result_t results[BENCH_TYPE_MAX]) {
+    char results_string[NUMBER_STRING_SIZE] = { 0 };
+    long result = (long)iterations[type];
+    format_score_number(result, results_string, NUMBER_STRING_SIZE);
+
+    switch(type) {
+        case BENCH_TYPE_RAND: bench_printf("Random numbers (%.2f):\t\t%s / s\n", results[type].double_value, results_string); break;
+        case BENCH_TYPE_WC: bench_printf("Word Count (%d):\t\t\t%s / s\n", results[type].int_value, results_string); break;
+        case BENCH_TYPE_CRC32: bench_printf("CRC32 (0x%X):\t\t\t%s / s\n", results[type].uint32_value, results_string); break;
+        case BENCH_TYPE_RLE: bench_printf("RLE (%.2f%%):\t\t\t\t%s / s\n", results[type].double_value, results_string); break;
+        case BENCH_TYPE_QSORT: bench_printf("Sort (%d):\t\t\t\t%s / s\n", results[type].uint32_value, results_string); break;
+
+        default: bench_printf("???: \t\t\t%s\n", results_string); break;
+    }
+}
+
+static void print_score(int64_t iterations[BENCH_TYPE_MAX]) {
+    double points_sum = 0.0, points = 0.0;
+    int type;
+
+    /* baseline results for i486DX4 100Mhz on Windows NT 3.5 */
+    static int64_t baseline[BENCH_TYPE_MAX] = {
+        1500000, /* random numbers */
+        6800, /* word count */
+        6700, /* CRC32 */
+        3500, /* RLE */
+        8700 /* QuickSort */
+    };
+
+    for(type=0; type<BENCH_TYPE_MAX; ++type) {
+        points_sum += (((double)iterations[type] / (double)baseline[type]) * 100.0);
+    }
+
+    points = points_sum / BENCH_TYPE_MAX;
+
+    bench_printf("\nScore: %.2fpts\n", points);
+}
+
+int bench_main(int argc, char const *argv[]) {
+    static int64_t iterations[BENCH_TYPE_MAX] = { 0 };
+    static bench_result_t results[BENCH_TYPE_MAX] = { 0.0 };
+
+    int type;
+    uint32_t number_of_iterations;
+    double start;
+    double current, elapsed_time, time_remainder;
+
+    /* start benchmarking */
+    bench_printf("Incredibly Simple Benchmark! %s (%d seconds per test) \n\n", ISBENCH_VERSION, (int)BENCH_TIME);
+    
+    for(type=0; type<BENCH_TYPE_MAX; ++type) {
+        start = bench_get_time();
+        do {
+            number_of_iterations = 1;
+            switch(type) {
+                case BENCH_TYPE_RAND: 
+                    results[type] = bench_random_numbers(); 
+                    number_of_iterations = BENCH_RND_ITERATIONS;
+                    break;
+
+                case BENCH_TYPE_WC: 
+                    results[type] = bench_word_count();
+                    number_of_iterations = BENCH_WC_ITERATIONS;
+                    break;
+
+                case BENCH_TYPE_CRC32: 
+                    results[type] = bench_crc32_hashes(); 
+                    number_of_iterations = BENCH_CRC32_ITERATIONS;
+                    break;
+
+                case BENCH_TYPE_RLE: 
+                    results[type] = bench_rle_compression(); 
+                    number_of_iterations = BENCH_RLE_ITERATIONS;
+                    break;
+
+                case BENCH_TYPE_QSORT: 
+                    results[type] = bench_quick_sort();
+                    number_of_iterations = BENCH_QSORT_ITERATIONS;
+                    break;
+            }
+
+            iterations[type] += (int64_t)(number_of_iterations / BENCH_TIME);
+
+            current = bench_get_time();
+            elapsed_time = current - start;
+        } while(elapsed_time <= BENCH_TIME);
+
+        /* include time remainder and modify results accordingly */
+        time_remainder = BENCH_TIME - elapsed_time;
+        iterations[type] += (int64_t)(iterations[type] * (time_remainder / BENCH_TIME));
+
+        /* print results for current benchmark */
+        print_results(type, iterations, results);
+    }
+
+    print_score(iterations);
+
+    return 0;
 }
