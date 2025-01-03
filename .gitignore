@@ -8,6 +8,9 @@ build/unix/isbench-dbg
 build/unix/*.dSYM/*
 build/unix/*.dSYM/*
 
+# MinGW executables
+build/mingw/isbench*
+
 # VC++ 6.0 noise
 build/vcpp6/*.opt
 build/vcpp6/*.ncb
