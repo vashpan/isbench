@@ -33,7 +33,8 @@
 
 #include <stdio.h>
 #include <stdarg.h>
-#include <time.h>
+
+#include <sys/time.h>
 
 #include "platform.h"
 
@@ -54,8 +55,13 @@ void bench_snprintf(char* str, unsigned len, const char* format, ...) {
 }
 
 double bench_get_time() {
-    struct timespec tp;
-    clock_gettime(CLOCK_MONOTONIC, &tp);
-
-    return (double)(tp.tv_sec + (tp.tv_nsec / 1E9));
+#if defined(_POSIX_TIMERS) && defined(CLOCK_REALTIME)
+    struct timespec ts;
+    clock_gettime(CLOCK_REALTIME, &ts);
+    return (double)ts.tv_sec + (double)ts.tv_nsec / 1.0e9;
+#else
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return (double)(tv.tv_sec + (tv.tv_usec / 1E6));
+#endif
 }
