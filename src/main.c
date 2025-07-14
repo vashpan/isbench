@@ -36,6 +36,10 @@
 
 #define NUMBER_STRING_SIZE 128 /* maximum size of score string */
 
+typedef struct {
+    bool verbose;
+} bench_options_t;
+
 typedef enum {
     BENCH_TYPE_RAND = 0,
     BENCH_TYPE_WC,
@@ -45,6 +49,8 @@ typedef enum {
 
     BENCH_TYPE_MAX
 } bench_type;
+
+static bench_options_t g_bench_options = { 0 };
 
 static void format_score_number(int64_t number, char* result, unsigned result_size) {
     double new_value = (double)number;
@@ -83,16 +89,29 @@ static void format_score_number(int64_t number, char* result, unsigned result_si
 static void print_results(bench_type type, int64_t iterations[BENCH_TYPE_MAX], bench_result_t results[BENCH_TYPE_MAX]) {
     char results_string[NUMBER_STRING_SIZE] = { 0 };
     long result = (long)iterations[type];
+
     format_score_number(result, results_string, NUMBER_STRING_SIZE);
 
-    switch(type) {
-        case BENCH_TYPE_RAND: bench_printf("Random numbers (%.2f):\t\t%s / s\n", results[type].double_value, results_string); break;
-        case BENCH_TYPE_WC: bench_printf("Word Count (%d):\t\t\t%s / s\n", results[type].int_value, results_string); break;
-        case BENCH_TYPE_CRC32: bench_printf("CRC32 (0x%X):\t\t\t%s / s\n", results[type].uint32_value, results_string); break;
-        case BENCH_TYPE_RLE: bench_printf("RLE (%.2f%%):\t\t\t\t%s / s\n", results[type].double_value, results_string); break;
-        case BENCH_TYPE_QSORT: bench_printf("Sort (%d):\t\t\t\t%s / s\n", results[type].uint32_value, results_string); break;
+    if (g_bench_options.verbose) {
+        switch(type) {
+            case BENCH_TYPE_RAND: bench_printf("Random numbers (%.2f):\t%s / s\n", results[type].double_value, results_string); break;
+            case BENCH_TYPE_WC: bench_printf("Word Count (%d):\t\t%s / s\n", results[type].int_value, results_string); break;
+            case BENCH_TYPE_CRC32: bench_printf("CRC32 (0x%X):\t\t%s / s\n", results[type].uint32_value, results_string); break;
+            case BENCH_TYPE_RLE: bench_printf("RLE (%.2f%%):\t\t\t%s / s\n", results[type].double_value, results_string); break;
+            case BENCH_TYPE_QSORT: bench_printf("Sort (%d):\t\t\t%s / s\n", results[type].uint32_value, results_string); break;
 
-        default: bench_printf("???: \t\t\t%s\n", results_string); break;
+            default: bench_printf("???: \t\t\t%s\n", results_string); break;
+        }
+    } else {
+        switch(type) {
+            case BENCH_TYPE_RAND: bench_printf("Random numbers:\t%s / s\n", results_string); break;
+            case BENCH_TYPE_WC: bench_printf("Word Count:\t%s / s\n", results_string); break;
+            case BENCH_TYPE_CRC32: bench_printf("CRC32:\t\t%s / s\n", results_string); break;
+            case BENCH_TYPE_RLE: bench_printf("RLE:\t\t%s / s\n", results_string); break;
+            case BENCH_TYPE_QSORT: bench_printf("Sort:\t\t%s / s\n", results_string); break;
+
+            default: bench_printf("???: \t\t\t%s\n", results_string); break;
+        }
     }
 }
 
@@ -115,7 +134,21 @@ static void print_score(int64_t iterations[BENCH_TYPE_MAX]) {
 
     points = points_sum / BENCH_TYPE_MAX;
 
-    bench_printf("\nScore: %.2fpts\n", points);
+    bench_printf("\nScore: %.2f pts\n", points);
+}
+
+static bench_options_t parse_options(int argc, char const *argv[]) {
+    bench_options_t result_options = { 0 }; 
+    int arg_i;
+
+    /* verbose option */
+    for (arg_i = 1; arg_i < argc; ++arg_i) {
+        if (isb_strcmp(argv[arg_i], "-v") == 0 || isb_strcmp(argv[arg_i], "--verbose") == 0) {
+            result_options.verbose = TRUE;
+        }
+    }
+
+    return result_options;
 }
 
 int bench_main(int argc, char const *argv[]) {
@@ -127,9 +160,17 @@ int bench_main(int argc, char const *argv[]) {
     double start;
     double current, elapsed_time, time_remainder;
 
+    g_bench_options = parse_options(argc, argv);
+
+    bench_printf("Incredibly Simple Benchmark! %s\n", ISBENCH_VERSION);
+    if (!g_bench_options.verbose) {
+        bench_printf("Run with -v or --verbose for more details\n");
+    } else {
+        bench_printf("(%d seconds per test)\n", (int)BENCH_TIME);
+    }
+    bench_printf("\n");
+
     /* start benchmarking */
-    bench_printf("Incredibly Simple Benchmark! %s (%d seconds per test) \n\n", ISBENCH_VERSION, (int)BENCH_TIME);
-    
     for(type=0; type<BENCH_TYPE_MAX; ++type) {
         start = bench_get_time();
         do {
