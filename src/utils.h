@@ -41,5 +41,6 @@ void isb_strzero(char* dst, size_t size);
 unsigned isb_strlen(const char* text);
 bool isb_iswhitespace(char c);
 char* isb_strcat(char* dst, const char* txt);
+int isb_strcmp(const char* str1, const char* str2);
 
 #endif
