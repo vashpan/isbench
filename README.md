@@ -1,3 +1,9 @@
+# THIS BENCHMARK IS ARCHIVED
+
+This project is replaced by [Retro Nano Bench](https://github.com/vashpan/retro-nano-bench)
+
+Retro Nano Bench is very similar project, basically evolved from this one.
+
 # Incredibly Simple Benchmark
 
 A very simple (and naive) integer benchmark aimed at maximum portability across multiple OSes and independence on any system-specific code.
